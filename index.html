@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>The Village</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="script.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+    <script src="https://unpkg.com/compromise"></script>
+    <script src="https://cdn.jsdelivr.net/npm/string-similarity/umd/string-similarity.min.js"></script>
+  </head>
+  <body>
+    <div id="overlay">
+        <div class="spinner"></div>
+    </div>      
+    <h1 style="margin-left:25px;">The Village</h1>
+    <center><h2 style="width:50%;" id="slogan">The Village creates potent new connections and limitless possibilities for locally driven solutions in global health</h2></center>
+    <div class="alertDiv" id="alertDiv" style="display:none">
+        <div class="alertprogress" id="alertProgress" style="width:0%;height:5px;border-radius: 5px;"></div>
+        <p class="alertdivtext" id="alertDivText"></p>
+    </div>
+    <div id="welcome-section" class="welcome-section">
+        <center><hr style="border:none;">
+        <h2>Sign in</h2>
+        <input type="email" placeholder="email" id="emailBox"><br>
+        <input type="password" placeholder="password" id="passwordBox"><br>
+        <button id="signIn" onclick="login()">Sign in</button><br>
+        <p>or<br>Sign in with</p>
+          <button id="signinAccountGoogle" style="color:black; background-color:white">
+                <i class="fab fa-google"></i> Log in with <b>Google</b>
+          </button><hr style="border:none;"><hr style="border:none;">
+        <a href="#" id="createAccountLink">Sign Up</a>
+        </center>
+    </div>
+    <div id="create-section" class="welcome-section">
+        <center><hr style="border:none;">
+        <h2>Create Account</h2>
+        <input type="email" placeholder="email" id="createEmailBox"><br>
+        <input type="password" placeholder="password" id="createPasswordBox"><br>
+        <button id="createAccount" onclick="createAccount()">Create an Account</button>
+        <p>or<br>Sign in with</p>
+            <button id="signupAccountGoogle" style="color:black; background-color:white">
+                <i class="fab fa-google"></i> Sign up with <b>Google</b>
+            </button><hr style="border:none;"><hr style="border:none;">
+        <a href="#" id="signInLink">Sign in</a>
+        </center>
+    </div>
+    <div id="limbo-state" class="welcome-section" style="display:none"><br>
+        <h2 style="text-align:center;">Tell us about yourself.</h2>
+        <h3 style="text-align:center;">This will take less than x minutes</h3>
+        <div class="row" id="page1">
+            <div class="columnL">
+                <label for="name">Name:</label>
+            </div>
+            <div class="columnR">
+                <input type="text" id="name" name="name" required><br>
+            </div>
+            <div class="columnL">
+                <label for="username">Preferred Username:</label>
+            </div>
+            <div class="columnR">
+                <input type="text" id="username" name="username" required><br>
+            </div>
+            <div class="columnL">
+                <label for="gender">Gender:</label>
+            </div>
+            <div class="columnR">
+                <select id="gender" name="gender" required>
+                    <option value="null">Select</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                    <option value="prefer not say">Prefer Not Say</option>
+                </select>
+            </div>
+            <div class="columnL">
+                <label for="highestDegree">Your highest degree:</label>
+            </div>
+            <div class="columnR">
+                <select id="highestDegree" name="highestDegree" required>
+                    <option value="null">Select</option>
+                    <option value="bachelor">Bachelor's</option>
+                    <option value="master">Master's</option>
+                    <option value="mba">MBA</option>
+                    <option value="md">MD</option>
+                    <option value="phd">PhD</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="columnL">
+                <label for="location">Your current country of residence</label>
+            </div>
+            <div class="columnR">
+                <input type="text" id="location" name="location" required><br>
+            </div>
+            <div class="columnL">
+                <label for="nationality">Your nationality</label>
+            </div>
+            <div class="columnR">
+                <input type="text" id="nationality" name="nationality" required><br>
+            </div>
+            <div class="columnL">
+                <label for="workLocations">Countries in which you work</label>
+            </div>
+            <div class="columnR">
+                <input type="text" id="workLocations" name="workLocations" required><br>
+            </div>
+            <div class="columnL">
+                <label for="workOrganizations">Organization(s) in which you work</label>
+            </div>
+            <div class="columnR">
+                <input type="text" id="workOrganizations" name="workOrganizations" required><br>
+            </div>
+            <div class="columnL">
+                <label for="roleOrganization"> Your role within your organization:</label>
+            </div>
+            <div class="columnR">
+                <select id="roleOrganization" name="roleOrganization" required>
+                    <option value="null">Select</option>
+                    <option value="student">Student</option>
+                    <option value="resident">Resident</option>
+                    <option value="fellow">Fellow</option>
+                    <option value="junior clinician">Junior Clinician</option>
+                    <option value="senior clinician">Senior Clinician</option>
+                    <option value="junior researcher">Junior Researcher</option>
+                    <option value="senior researcher">Senior Researcher</option>
+                    <option value="staff member">Staff Member</option>
+                    <option value="business person">Business Person</option>
+                    <option value="editor">Editor</option>
+                    <option value="manager">Manager</option>
+                    <option value="administrator">Administrator</option>
+                    <option value="grant management">Grant Management</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="columnL">
+                <label for="typeOfJob">Type of Job:</label>
+            </div>
+            <div class="columnR">
+                <div id="typeOfJob">
+                    <label for="Research"><input type="checkbox" name="typeoJob" value="Research"> Research</label><br>
+                    <label for="Clinical"><input type="checkbox" name="typeoJob" value="Clinical"> Clinical</label><br>
+                    <label for="Business"><input type="checkbox" name="typeoJob" value="Business"> Business</label><br>
+                    <label for="NGO"><input type="checkbox" name="typeoJob" value="NGO"> NGO</label><br>
+                    <label for="Funding"><input type="checkbox" name="typeoJob" value="Funding"> Funding</label><br>
+                    <label for="Publishing"><input type="checkbox" name="typeoJob" value="Publishing"> Publishing</label><br>
+                    <label for="other"><input type="checkbox" name="typeoJob" value="other"> other</label><br>
+                </div>                  
+            </div>
+            <div class="columnL">
+                <label for="yearsInJob">Years in current job:</label>
+            </div>
+            <div class="columnR">
+                <input type="text" id="yearsInJob" name="yearsInJob" required><br>
+            </div>
+            <div class="columnL">
+                <label for="resourcesNeeded">Select resources you have needed in the past:</label>
+            </div>
+            <div class="columnR">
+                <div id="resourcesNeeded">
+                    <label for="trainingExperience"><input type="checkbox" name="resourcosNeeded" value="trainingExperience"> Training Experience</label><br>
+                    <label for="researchFunding"><input type="checkbox" name="resourcosNeeded" value="researchFunding"> Research Funding</label><br>
+                    <label for="mentorship"><input type="checkbox" name="resourcosNeeded" value="mentorship"> Mentorship</label><br>
+                    <label for="other"><input type="checkbox" name="resourcosNeeded" value="other"> Other</label><br>
+                  </div>                  
+            </div>
+            <div class="columnL">
+                <label for="needed"> Please tell us more about the resource(s) you have needed in the past<br>
+                                Were you successful in finding this resource? How did you find it? What would have been helpful for your search?</label>
+            </div>
+            <div class="columnR">
+                <input type="text" id="needed" name="needed" required><br>
+            </div>
+            <div class="columnL">
+                <label for="resourcesProvided">Select resources you have provided in the past:</label>
+            </div>
+            <div class="columnR">
+                <div id="resourcesProvided">
+                    <label for="trainingExperience"><input type="checkbox" name="resourcosProvided" value="trainingExperience"> Training Experience</label><br>
+                    <label for="researchFunding"><input type="checkbox" name="resourcosProvided" value="researchFunding"> Research Funding</label><br>
+                    <label for="mentorship"><input type="checkbox" name="resourcosProvided" value="mentorship"> Mentorship</label><br>
+                    <label for="other"><input type="checkbox" name="resourcosProvided" value="other"> Other</label><br>
+                  </div>                  
+            </div>
+            <div class="columnL">
+                <label for="provided">Please tell us more about the resource(s) that you have provided in the past<br>
+                                        How did you let people know? What would be helpful in finding ways to provide resources in the future?</label>
+            </div>
+            <div class="columnR">
+                <input type="text" id="provided" name="provided" required><br>
+            </div>
+            <div class="columnL">
+                <label for="goals">Your goals for participating in The Village</label>
+            </div>
+            <div class="columnR">
+                <input type="text" id="goals" name="goals" required><br>
+            </div>
+            <div class="columnL">
+                <label for="suggestions">Suggestions for The Village</label>
+            </div>
+            <div class="columnR">
+                <input type="text" id="suggestions" name="suggestions" required><br>
+            </div>
+            <br><br>
+        </div>
+        <button id="save-questionnaire-button" onclick="saveQuestionnaire('email')">Submit</button>
+    </div>
+    <div id="user-section" class="user-section">
+        <p id="change-user-section-div" style="text-align:center;"><u>Customize your profile!</u></p>
+        <div id="user-list">
+            <center id="noMatches"><span style="color:red">No matches yet.</span><br>But don't worry, we'll let you know when we find a match<br>In the meantime, want to see some random profiles? <br><span id="showMeSomeProfiles">Show Profiles</span></center>
+        </div>
+        <div id="user-profile" style="display:none">
+            <a href="#" onclick=GoBack()>Back</a>
+            <h3>Name: <span id="userName">Loading...</span></h3>
+            <h3>Email: <span id="userEmail">Loading...</span></h3>
+            <h3>Username: <span id="userUsername">Loading...</span></h3>
+            <h3>Password: <span class="user-profile-button" id="userPassword">Change</span></h3>
+            <div id="password-change-form" style="display: none;">
+                <div style="display:flex; flex-direction: row;">
+                    <input type="password" id="current-password" placeholder="Current Password" style="width:40%">
+                    <input type="password" id="new-password" placeholder="New Password" style="width:40%">
+                    <button id="submit-password-change" style="margin-left: 5px; width:95px;">Save</button>
+                </div>
+            </div>
+            <h3>Social Networks</h3>
+            <p id="linkedlnContainer">&nbsp;&nbsp;&nbsp;Linkedln <span class="user-profile-button" onclick="showInput('linkedln')" id="linkedln">Add</span></p>
+            <div id="linkedln-input" style="display: none;">
+                <input type="text" id="linkedin-link" placeholder="Enter your LinkedIn profile URL">
+                <button class="user-profile-button" onclick="addSocialNetwork('linkedln')" data-network>Save</button>
+            </div>
+            
+            <p id="gmailContainer">&nbsp;&nbsp;&nbsp;Gmail <span class="user-profile-button" onclick="showInput('gmail')" id="gmail">Add</span></p>
+            <div id="gmail-input" style="display: none;">
+                <input type="text" id="gmail-link" placeholder="Enter your Gmail address">
+                <button class="user-profile-button" onclick="addSocialNetwork('gmail')">Save</button>
+            </div>
+            
+            <p id="researchGateContainer">&nbsp;&nbsp;&nbsp;ResearchGate <span class="user-profile-button" onclick="showInput('researchgate')" id="researchGate">Add</span></p>
+            <div id="researchgate-input" style="display: none;">
+                <input type="text" id="researchgate-link" placeholder="Enter your ResearchGate profile URL">
+                <button class="user-profile-button" onclick="addSocialNetwork('researchgate')">Save</button>
+            </div>
+            
+            <p id="twitterContainer">&nbsp;&nbsp;&nbsp;Twitter <span class="user-profile-button" onclick="showInput('twitter')" id="twitter">Add</span></p>
+            <div id="twitter-input" style="display: none;">
+                <input type="text" id="twitter-link" placeholder="Enter your Twitter profile URL">
+                <button class="user-profile-button" onclick="addSocialNetwork('twitter')">Save</button>
+            </div>
+            
+            <p id="facebookContainer">&nbsp;&nbsp;&nbsp;Facebook <span class="user-profile-button" onclick="showInput('facebook')" id="facebook">Add</span></p>
+            <div id="facebook-input" style="display: none;">
+                <input type="text" id="facebook-link" placeholder="Enter your Facebook profile URL">
+                <button class="user-profile-button" onclick="addSocialNetwork('facebook')">Save</button>
+            </div>
+            <button class="user-profile-button" style="background-color:red" onclick="logout()">Logout</button>
+        </div>
+        <div id="extraFluff"></div>
+    </div>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section-about">
+                <p>Copyright © 2023 The Village - All Rights Reserved.</p>
+            </div>
+            <div class="footer-section-contact">
+                <span>Powered by TheVillage</span>
+            </div>
+        </div>
+    </footer>
+      
+    <script language="javascript" src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-firestore.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyA3SNRvY3trUraaaq1r3p8htPxDtjKG2Y8",
+        authDomain: "forms-24dc7.firebaseapp.com",
+        databaseURL: "https://forms-24dc7-default-rtdb.firebaseio.com/",
+        projectId: "forms-24dc7",
+        storageBucket: "forms-24dc7.appspot.com",
+        messagingSenderId: "978312569479",
+      };
+      firebase.initializeApp(config);
+      const firestore = firebase.firestore();
+    </script>
+    <script src="script.js"></script>
