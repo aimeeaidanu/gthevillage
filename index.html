@@ -28,12 +28,12 @@
             <div style="text-align:center;">
                 <img src="https://media.discordapp.net/attachments/783459212990611477/1081442266066993273/The_Village_Logo_FINAL.png?width=670&height=569" alt="The Village" style="width:100px;">
             </div>
-            <a href="#" onclick="goToMatches()"><i class="fas fa-search"></i> Matches</a>
-            <a href="#" onclick="goToProfile()"><i class="fas fa-users"></i> Profile</a>
+            <a href="#" onclick="goToMatches()"><i class="fas fa-search"></i> My Matches</a>
             <a href="#" onclick="goToQuestionnaire()"><i class="fa fa-poll"></i> Questionnaire</a>
-            <a href="#" onclick="goToContact()"><i class="fa fa-envelope"></i> Contact</a>
+            <a href="#" onclick="goToProfile()"><i class="fas fa-user"></i> My Profile</a>
+            <a href="#" onclick="goToContact()"><i class="fa fa-envelope"></i> Contact Us</a>
             <a href="#" onclick="goToFAQ()"><i class="fas fa-question-circle"></i> FAQs</a>
-            <a href="#" onclick="logout()" style="color:red"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </div>
 
@@ -369,14 +369,14 @@
                     </div>
                     <div class="columnR">
                         <div id="typeOfJob1">
-                            <label for="Research"><input type="checkbox" name="typeoJob" value="Research"> Research</label><br>
-                            <label for="Clinical"><input type="checkbox" name="typeoJob" value="Clinical"> Clinical</label><br>
-                            <label for="Business"><input type="checkbox" name="typeoJob" value="Business"> Business</label><br>
-                            <label for="NGO"><input type="checkbox" name="typeoJob" value="NGO"> NGO</label><br>
-                            <label for="Funding"><input type="checkbox" name="typeoJob" value="Funding"> Funding</label><br>
-                            <label for="Publishing"><input type="checkbox" name="typeoJob" value="Publishing"> Publishing</label><br>
-                            <label for="other"><input type="checkbox" name="typeoJob" value="other"> other</label><br>
-                        </div>                  
+                            <label for="Research"><input type="checkbox" name="typeoJob" value="Research" id="typeoJobResearch"> Research</label><br>
+                            <label for="Clinical"><input type="checkbox" name="typeoJob" value="Clinical" id="typeoJobClinical"> Clinical</label><br>
+                            <label for="Business"><input type="checkbox" name="typeoJob" value="Business" id="typeoJobBusiness"> Business</label><br>
+                            <label for="NGO"><input type="checkbox" name="typeoJob" value="NGO" id="typeoJobNGO"> NGO</label><br>
+                            <label for="Funding"><input type="checkbox" name="typeoJob" value="Funding" id="typeoJobFunding"> Funding</label><br>
+                            <label for="Publishing"><input type="checkbox" name="typeoJob" value="Publishing" id="typeoJobPublishing"> Publishing</label><br>
+                            <label for="other"><input type="checkbox" name="typeoJob" value="other" id="typeoJob" id="typeoJobother"> other</label><br>
+                        </div>
                     </div>
                     <div class="columnL">
                         <label for="yearsInJob">Years in current job:</label>
@@ -389,10 +389,10 @@
                     </div>
                     <div class="columnR">
                         <div id="resourcesNeeded1">
-                            <label for="trainingExperience"><input type="checkbox" name="resourcosNeeded" value="trainingExperience"> Training Experience</label><br>
-                            <label for="researchFunding"><input type="checkbox" name="resourcosNeeded" value="researchFunding"> Research Funding</label><br>
-                            <label for="mentorship"><input type="checkbox" name="resourcosNeeded" value="mentorship"> Mentorship</label><br>
-                            <label for="other"><input type="checkbox" name="resourcosNeeded" value="other"> Other</label><br>
+                            <label for="trainingExperience"><input type="checkbox" name="resourcosNeeded" value="trainingExperience" id="resourcosNeededtrainingExperience"> Training Experience</label><br>
+                            <label for="researchFunding"><input type="checkbox" name="resourcosNeeded" value="researchFunding" id="resourcosNeededresearchFunding"> Research Funding</label><br>
+                            <label for="mentorship"><input type="checkbox" name="resourcosNeeded" value="mentorship" id="resourcosNeededmentorship"> Mentorship</label><br>
+                            <label for="other"><input type="checkbox" name="resourcosNeeded" value="other" id="resourcosNeededother"> Other</label><br>
                           </div>                  
                     </div>
                     <div class="columnL">
@@ -407,11 +407,11 @@
                     </div>
                     <div class="columnR">
                         <div id="resourcesProvided1">
-                            <label for="trainingExperience"><input type="checkbox" name="resourcosProvided" value="trainingExperience"> Training Experience</label><br>
-                            <label for="researchFunding"><input type="checkbox" name="resourcosProvided" value="researchFunding"> Research Funding</label><br>
-                            <label for="mentorship"><input type="checkbox" name="resourcosProvided" value="mentorship"> Mentorship</label><br>
-                            <label for="other"><input type="checkbox" name="resourcosProvided" value="other"> Other</label><br>
-                          </div>                  
+                            <label for="trainingExperience"><input type="checkbox" name="resourcosProvided" value="trainingExperience" id="resourcosProvidedtrainingExperience"> Training Experience</label><br>
+                            <label for="researchFunding"><input type="checkbox" name="resourcosProvided" value="researchFunding" id="resourcosProvidedresearchFunding"> Research Funding</label><br>
+                            <label for="mentorship"><input type="checkbox" name="resourcosProvided" value="mentorship" id="resourcosProvidedmentorship"> Mentorship</label><br>
+                            <label for="other"><input type="checkbox" name="resourcosProvided" value="other" id="resourcosProvidedother"> Other</label><br>
+                        </div>                  
                     </div>
                     <div class="columnL">
                         <label for="provided">Please tell us more about the resource(s) that you have <u>provided</u> in the past<br>
@@ -440,7 +440,7 @@
             <h3>Contact Us</h3>
             <form id="contact">
                 <label for="contactMessage">Message:</label>
-                <textarea id="contactMessage" name="message" style="min-height:100px;" required></textarea>
+                <textarea id="contactMessage" name="message" style="min-height:200px; width:90%;" required></textarea>
                 <hr style="border:none;">
                 <button id="submitContact">Send</button>
             </form>
