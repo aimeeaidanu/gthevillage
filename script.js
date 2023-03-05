@@ -99,9 +99,28 @@ firebase.auth().onAuthStateChanged(async function (user) {
                 // Iterate over the questionnaire data and create list items for each field with its value
                 for (var field in questionnaireData) {
                     // Check if the field has a value
-                    if (questionnaireData[field]) {
-                        var questionnairefield = document.getElementById(field + "1")
-                        questionnairefield.value=questionnaireData[field]
+                    var questionnairefield = document.getElementById(field + "1");
+
+                    if (field == "typeOfJob" || field == "resourcesNeeded" || field == "resourcesProvided") {
+                        var fieldsToSelect = questionnaireData[field].split(",");
+                        
+                        fieldsToSelect.forEach(function(item) {
+                            if(field == "typeOfJob"){
+                                var checkbox = document.getElementById("typeoJob" + item);
+                            } else if (field == "resourcesNeeded"){
+                                var checkbox = document.getElementById("resourcosNeeded" + item)
+                            } else {
+                                var checkbox = document.getElementById("resourcosProvided" + item)
+                            }
+                            
+                            if (checkbox) {
+                                checkbox.checked = true;
+                            } else {
+                                console.log("Checkbox not found: " + item);
+                            }
+                        });
+                    } else {
+                        questionnairefield.value = questionnaireData[field];
                     }
                 }
             } else {
