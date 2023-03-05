@@ -487,11 +487,11 @@ footer {
 }
 
 @media(max-width:500px){
-    .welcome-section, .limbo-state, #user-questions{
+    .welcome-section, .limbo-state, #user-questions, #user-section{
         width: 90%;
     }
-    #user-section{
-        width:90%;
+    #user-contact{
+        width:100%;
     }
 }
 
