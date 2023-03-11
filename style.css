@@ -417,6 +417,29 @@ html {
     padding: 15px;
 }
 
+.hellothere a{
+    color:#551a8b;
+    text-decoration: none;
+}
+  
+.hellothere label {
+    border:1px solid #ccc;
+    border-radius:5px;
+    width:75%;
+    padding:10px 20px;
+    margin:5px;
+    display:block; 
+}
+   
+.hellothere label:hover {
+    background:#eee;
+    cursor:pointer;
+}
+
+.hellothere input:checked+label {
+    background-color: green;
+}
+
 footer {
     color:white;
     padding: 10px;
@@ -479,16 +502,22 @@ footer {
         padding: 0;
     }
     #user-profile, #user-contact, #noMatches{
-        width:75%;
+        width:85%;
     }
     .logo{
         width:30%; height:auto;
+    }
+    .hellothere label{
+        width:50%;
     }
 }
 
 @media(max-width:500px){
     .welcome-section, .limbo-state, #user-questions, #user-section{
-        width: 90%;
+        width: 99%;
+    }
+    .hellothere label{
+        width: 70%;
     }
     #user-contact{
         width:100%;
