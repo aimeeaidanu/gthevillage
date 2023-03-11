@@ -192,12 +192,13 @@ firebase.auth().onAuthStateChanged(async function (user) {
                     if(doc.data().passed == true){
                         return;
                     }
-                    document.getElementById("noMatches").innerHTML = "Your Matches:"
+                    document.getElementById("noMatches").innerHTML = "<b>Your Matches:</b>"
                     const socialData = infoSnapshot.data();
                     // Create a new user item and append it to the user list
                     const userItem = document.createElement("div");
                     userItem.classList.add("user-item");
                     userItem.id = "user-item-" + socialData.name;
+
                     const userInfo = document.createElement("div");
                     userInfo.classList.add("user-info");
                     const userTitle = document.createElement("h3");
@@ -206,6 +207,11 @@ firebase.auth().onAuthStateChanged(async function (user) {
                     userSubtitle.style.fontSize = "small";
                     userSubtitle.textContent = ` Location: ${socialData.location}`;
                     userTitle.appendChild(userSubtitle);
+
+                    const buttonsContainer = document.createElement('div');
+                    buttonsContainer.className = "user-buttons"
+                    buttonsContainer.style.display="flex";
+                    buttonsContainer.style.flexDirection="row";
                     const likesRef = firestore.collection(`users/${matchEmail}/likes`);
                     const userLikeCount = document.createElement("h4")
                     likesRef.get().then((querySnapshot) => {
@@ -214,38 +220,36 @@ firebase.auth().onAuthStateChanged(async function (user) {
                     }).catch((error) => {
                         console.error("Error getting likes collection: ", error);
                     });
-                    
-                    const userDescription = document.createElement("p");
-                    userDescription.innerHTML = `<b>AI Analysis: </b>` + doc.data().similarities;;
-                    userInfo.appendChild(userTitle);
-                    userInfo.appendChild(userLikeCount)
-                    userInfo.appendChild(userDescription);  
-                    
-                    const userButtons = document.createElement("div");
-                    userButtons.classList.add("user-buttons");
                     const connectButton = document.createElement("button");
                     connectButton.id = "connect-button" + socialData.name;
-                    connectButton.classList.add("connect-button");
+                    connectButton.className = "matchButtonList"
                     connectButton.dataset.label = "Connect";
                     const connectIcon = document.createElement("i");
                     connectIcon.classList.add("fa", "fa-check");
                     connectIcon.style.color = "greenyellow";
                     connectButton.appendChild(connectIcon);
                     const emojisButton = document.createElement("button");
-                    emojisButton.classList.add("emojis-button");
+                    emojisButton.className = "matchButtonList"
                     emojisButton.dataset.label = "Like";
                     emojisButton.textContent = "👍";
                     const passButton = document.createElement("button");
-                    passButton.classList.add("pass-button");
+                    passButton.className = "matchButtonList"
                     passButton.id = "pass-button" + socialData.name
                     passButton.dataset.label = "Pass";
                     passButton.style.color = "red";
-                    passButton.textContent = "X";
-                    userButtons.appendChild(connectButton);
-                    userButtons.appendChild(emojisButton);
-                    userButtons.appendChild(passButton);
+                    const passIcon = document.createElement("i");
+                    passIcon.classList.add("fas", "fa-times");
+                    passButton.appendChild(passIcon);
+                    buttonsContainer.appendChild(userLikeCount)
+                    buttonsContainer.appendChild(connectButton);
+                    buttonsContainer.appendChild(emojisButton);
+                    buttonsContainer.appendChild(passButton);
+                    const userDescription = document.createElement("p");
+                    userDescription.innerHTML = `<b>AI Analysis: </b>` + doc.data().similarities;;
+                    userInfo.appendChild(userTitle);
+                    userInfo.appendChild(userDescription); 
+                    userInfo.appendChild(buttonsContainer); 
                     userItem.appendChild(userInfo);
-                    userItem.appendChild(userButtons);
                     document.getElementById("user-list").appendChild(userItem);
 
                     // Get the social network data and display it in the user-connect div
@@ -655,97 +659,6 @@ async function matchUser(user){
     });
 }
 
-async function compareUsers(user1, user2) {
-    // Get the user data from Firestore
-    const user1Data = await getUserData(user1);
-    const user2Data = await getUserData(user2);
-  
-    // Format the data as inputs to the GPT model
-    const input1 = formatInput(user1Data);
-    const input2 = formatInput(user2Data);
-    
-    // Call the OpenAI GPT endpoint to generate text comparing the two users
-    const response = await fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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' // Replace with your OpenAI API key
-        },
-        body: JSON.stringify({
-            prompt: `Compare user ${user1} to user ${user2}.\n\nUser ${user1}: ${input1}\n\nUser ${user2}: ${input2}\n\n`,
-            temperature:0.5,
-            max_tokens:256,
-            top_p:1,
-            frequency_penalty:0,
-            presence_penalty:0
-        })
-    });
-    // Parse the response and extract the generated text
-    const responseJson = await response.json();
-    const comparison = responseJson.choices[0].text.trim();
-    const docRefPath = `users/${user1}/matches/${user2}/`;
-    const docRefPath2 = `users/${user2}/matches/${user1}`;
-    
-    fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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'
-        },
-        body: JSON.stringify({
-            prompt: `Similarity Analysis: ${comparison}\n\nDo these two users have enough similarities to be considered a match?\n\nYes or No:\n\n`,
-            temperature:0.2,
-            max_tokens:25,
-            top_p:1,
-            frequency_penalty:0,
-            presence_penalty:0
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        var answer = data.choices[0].text.trim();
-        console.log(comparison)
-        console.log("Answer: " + answer);
-        if(answer.toLowerCase().includes("yes")) {
-            db.doc(docRefPath).set({
-                email:user2,
-                similarities:comparison
-            }).then(() => {
-                console.log(`%c${answer.split(" ")[0]}`, "color:green");
-            }).catch((error) => {
-                console.error(error);
-            });
-            db.doc(docRefPath2).set({
-                email:user2,
-                similarities:comparison
-            }).catch((error) => {
-                console.error(error)
-            })
-        } else {
-            console.log(`%c${answer.split(" ")[0]}`, "color:red");
-        }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-    return comparison;
-}
-
-// Helper function to get a user's data from Firestore
-async function getUserData(user) {
-    const doc = await db.collection('users').doc(user).get();
-    return doc.data();
-}
-
-// Helper function to format user data as input to the GPT model
-function formatInput(data) {
-    let input = '';
-    for (const key in data) {
-        input += `${key}: ${data[key]}\n`;
-    }
-    return input;
-}
-
 function showAlert(text, type) {
     var alertDiv = document.getElementById('alertDiv');
     alertDiv.style.display = "block"
@@ -798,99 +711,3 @@ function showAlert(text, type) {
         }
     });
 }
-
-/**
-old prompt: User 1: " + JSON.stringify(input1) + "\n\nUser 2: " + JSON.stringify(input2) + "\n\n
-async function compareUsers(user1, user2) {
-    // Format the data as inputs to the GPT model
-    const input1 = await formatInput(user1);
-    const input2 = await formatInput(user2);
-
-    // Call the OpenAI GPT endpoint to generate text comparing the two users
-    const response1 = await fetch('https://api.openai.com/v1/engines/gpt-3.5-turbo/chat', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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'
-        },
-        body: JSON.stringify({
-            messages: [
-                {"role": "system", "content": `You are comparing user ${user1} to user ${user2}`},
-                {"role": "user", "content": input1},
-                {"role": "user", "content": input2},
-            ],
-            max_tokens: 256,
-            stop: '\n'
-        })
-    });
-    const responseJson1 = await response1.json();
-    const comparison = responseJson1.choices[0].text.trim();
-
-    // Call the OpenAI GPT endpoint to ask if the two users are a match
-    const response2 = await fetch('https://api.openai.com/v1/engines/gpt-3.5-turbo/chat', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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'
-        },
-        body: JSON.stringify({
-            messages: [
-                {"role": "system", "content": `Do ${user1} and ${user2} have enough similarities to be considered a match?`},
-                {"role": "user", "content": `User 1: ${input1}\nUser 2: ${input2}`},
-                {"role": "assistant", "content": `Here is my analysis: ${comparison}`},
-                {"role": "user", "content": `Is this a match? Yes or No?`},
-            ],
-            max_tokens: 256,
-            stop: '\n',
-            context: responseJson1.choices[0].context
-        })
-    });
-    const responseJson2 = await response2.json();
-    const match = responseJson2.choices[0].text.trim();
-
-    console.log(`Comparison of ${user1} and ${user2}: ${comparison}`);
-    console.log(`Are ${user1} and ${user2} a match? ${match}`);
-
-    return comparison;
-}
-// Get a reference to the Firestore database
-var db = firebase.firestore();
-
-function matchRequests(user) {
-    console.log("match");
-    var openkey = "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";
-    var db = firebase.firestore();
-
-    db.collection("users").where("email", "==", user).get().then((querySnapshot) => {
-        if (querySnapshot.docs.length > 0) {
-            var fields = querySnapshot.docs[0].data();
-            var currentUserFieldString = "";
-            for (var field in fields) {
-                if (fields.hasOwnProperty(field)) {
-                    currentUserFieldString += fields[field] + " ";
-                }
-            }
-            db.collection("users").get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    if (doc.id !== user) {
-                        var fields = doc.data();
-                        var otherUserFieldString = "";
-                        for (var field in fields) {
-                            if (fields.hasOwnProperty(field)) {
-                                otherUserFieldString += fields[field] + " ";
-                            }
-                        }
-                        calculateMatch(currentUserFieldString, otherUserFieldString, openkey);
-                    }
-                });
-            }).catch((error) => {
-                console.log("Error getting documents:", error);
-            });
-        } else {
-            console.log("No such document!");
-        }
-    }).catch((error) => {
-        console.log("Error getting document:", error);
-    });
-}
-*/
