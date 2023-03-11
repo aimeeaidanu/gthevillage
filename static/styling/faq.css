@@ -41,7 +41,7 @@
   }
   
   .user-questions h1, h2 {
-    color: #90E76F;
+    color: black;
   }
   
   .user-questions h1 {
@@ -118,7 +118,7 @@
   .user-questions ul li i:before, ul li i:after {
     content: "";
     position: absolute;
-    background-color: #90E76F;
+    background-color: black;
     width: 3px;
     height: 9px;
   }
