@@ -61,7 +61,7 @@
         <button id="signupAccountGoogle" style="color:black; background-color:white; width:50%; height:auto; min-height: 50px; border: 1px solid black; border-radius:25px;">
             <span style="font-size: 25px;"><i class="fab fa-google"></i> Sign up with <span style="color:#4285F4; font-weight: bold;">G</span><span style="color: #DB4437; font-weight: bold;">o</span><span style="color: #F4B400; font-weight: bold;">o</span><span style="color: #4285F4; font-weight: bold;">g</span><span style="color: #0F9D58; font-weight: bold;">l</span><span style="color: #DB4437; font-weight: bold;">e</span></span>
         </button>
-        <p>or<br>Sign in with</p>
+        <p>or<br>Sign up with</p>
         <input type="email" placeholder="email" id="createEmailBox"><hr style="border:none;">
         <input type="password" placeholder="password" id="createPasswordBox"><hr style="border:none;">
         <button id="createAccount" onclick="createAccount()" style="width:50%; min-height:42px; border-radius: 25px;">Create an Account</button><br><hr style="border:none;">
@@ -161,14 +161,70 @@
             </div>
             <div class="columnR">
                 <div id="typeOfJob">
-                    <label for="Research"><input type="checkbox" name="typeoJob" value="Research"> Research</label><br>
-                    <label for="Clinical"><input type="checkbox" name="typeoJob" value="Clinical"> Clinical</label><br>
-                    <label for="Business"><input type="checkbox" name="typeoJob" value="Business"> Business</label><br>
-                    <label for="NGO"><input type="checkbox" name="typeoJob" value="NGO"> NGO</label><br>
-                    <label for="Funding"><input type="checkbox" name="typeoJob" value="Funding"> Funding</label><br>
-                    <label for="Publishing"><input type="checkbox" name="typeoJob" value="Publishing"> Publishing</label><br>
-                    <label for="other"><input type="checkbox" name="typeoJob" value="other"> other</label><br>
+                    <label for="Research"><input type="checkbox" name="typeoJob" value="Research" onclick="showArea('research')" id="research1"> Research</label><br>
+                    <label for="Clinical"><input type="checkbox" name="typeoJob" value="Clinical" onclick="showArea('clinical')" id="clinical1"> Clinical</label><br>
+                    <label for="Business"><input type="checkbox" name="typeoJob" value="Business" onclick="showArea('business')" id="business1"> Business</label><br>
+                    <label for="NGO"><input type="checkbox" name="typeoJob" value="NGO" onclick="showArea('ngo')" id="ngo1"> NGO</label><br>
+                    <label for="Funding"><input type="checkbox" name="typeoJob" value="Funding" onclick="showArea('funding')" id="funding1"> Funding</label><br>
+                    <label for="Publishing"><input type="checkbox" name="typeoJob" value="Publishing" onclick="showArea('publishing')" id="publishing1"> Publishing</label><br>
+                    <label for="other"><input type="checkbox" name="typeoJob" value="other" onclick="showArea('specifyMore')" id="specifyMore1"> other</label><br>
                 </div>                  
+            </div>
+            <div id="researchQ1" style="display:none">
+                <div class="columnL">
+                    <label for="researchArea">What is your research area?</label>
+                </div>
+                <div class="columnR">
+                    <input type="text" id="typeOfJobresearchArea1" name="researchArea" required><br>
+                </div>
+            </div>
+            <div id="clinicalQ1" style="display:none">
+                <div class="columnL">
+                    <label for="clinicalSpecialty">What is your clinical specialty</label>
+                </div>
+                <div class="columnR">
+                    <input type="text" id="typeOfJobclinicalSpecialty1" name="clinicalSpecialty" required><br>
+                </div>
+            </div>
+            <div id="businessQ1" style="display:none">
+                <div class="columnL">
+                    <label for="tellMoreArea">Please tell us more about your role in business</label>
+                </div>
+                <div class="columnR">
+                    <input type="text" id="typeOfJobbusiness1" name="tellMoreArea" required><br>
+                </div>
+            </div>
+            <div id="ngoQ1" style="display:none">
+                <div class="columnL">
+                    <label for="tellMoreArea">Please tell us more about your role in NGO</label>
+                </div>
+                <div class="columnR">
+                    <input type="text" id="typeOfJobngo1" name="tellMoreArea" required><br>
+                </div>
+            </div>
+            <div id="fundingQ1" style="display:none">
+                <div class="columnL">
+                    <label for="tellMoreArea">Please tell us more about your role in funding</label>
+                </div>
+                <div class="columnR">
+                    <input type="text" id="typeOfJobfunding1" name="tellMoreArea" required><br>
+                </div>
+            </div>
+            <div id="publishingQ1" style="display:none">
+                <div class="columnL">
+                    <label for="tellMoreArea">Please tell us more about your role in publishing</label>
+                </div>
+                <div class="columnR">
+                    <input type="text" id="typeOfJobpublishing1" name="tellMoreArea" required><br>
+                </div>
+            </div>
+            <div id="specifyMoreQ1" style="display:none">
+                <div class="columnL">
+                    <label for="otherSpecify">Please specify:</label>
+                </div>
+                <div class="columnR">
+                    <input type="text" id="typeOfJobotherSpecify1" name="otherSpecify" required><br>
+                </div>
             </div>
             <div class="columnL">
                 <label for="yearsInJob">Years in current job:</label>
@@ -176,53 +232,223 @@
             <div class="columnR">
                 <input type="text" id="yearsInJob" name="yearsInJob" required><br>
             </div>
+            <br>
+            <div style="display:inline-block;">
+                <div style="display:flex;">
+                    <div style="float:left; width:50%;">
+                        <h4>What kind of training do you hope to Receive?</h4>
+                        <input type="checkbox" id="trainingReceivewebinar" name="trainingTypeReceive" value="webinar">
+                        <label for="webinar">Webinar</label><br>
+                        <input type="checkbox" id="trainingReceiveprotocol" name="trainingTypeReceive" value="protocol">
+                        <label for="protocol">Protocol</label><br>
+                        <input type="checkbox" id="trainingReceiveshortCourse" name="trainingTypeReceive" value="shortCourse">
+                        <label for="shortCourse">Short course</label><br>
+                        <input type="checkbox" id="trainingReceivedegreeProgram" name="trainingTypeReceive" value="degreeProgram" onclick="showMoreOriginal('trainingReceive', 'degreeProgram')">
+                        <label for="degreeProgram">Degree program</label><br>
+                        <input type="checkbox" id="trainingReceiveapprenticeship" name="trainingTypeReceive" value="apprenticeship">
+                        <label for="apprenticeship">Apprenticeship</label><br>
+                        <input type="checkbox" id="trainingReceivesoftSkills" name="trainingTypeReceive" value="softSkills">
+                        <label for="softSkills">Soft skills training</label><br>
+                        <input type="checkbox" id="trainingReceivewriting" name="trainingTypeReceive" value="writing" onclick="showMoreOriginal('trainingReceive','writing')">
+                        <label for="writing">Writing</label><br>
+                        <input type="checkbox" id="trainingReceiveotherTraining" name="trainingTypeReceive" value="otherTraining">
+                        <label for="otherTraining">Other</label>
+                        <div id="trainingReceivedegreeProgramQuestions" style="display: none;">
+                            <label>What degree program are you interested in?</label><br>
+                            <input type="radio" id="trainingReceivebachelors" name="degreeProgramTypeReceive" value="bachelors">
+                            <label for="bachelors">Bachelor's</label><br>
+                            <input type="radio" id="trainingReceivemasters" name="degreeProgramTypeReceive" value="masters">
+                            <label for="masters">Master's</label><br>
+                            <input type="radio" id="trainingReceivephd" name="degreeProgramTypeReceive" value="phd">
+                            <label for="phd">PhD</label><br>
+                            <input type="radio" id="trainingReceiveotherDegree" name="degreeProgramTypeReceive" value="otherDegree">
+                            <label for="otherDegree">Other</label><br>
+                        </div>
+                        <div id="trainingReceivewritingQuestions" style="display: none;">
+                            <label>What type of writing training are you interested in?</label><br>
+                            <input type="radio" id="trainingReceivemanuscript" name="writingTypeReceive" value="manuscript">
+                            <label for="manuscript">Manuscript</label><br>
+                            <input type="radio" id="trainingReceivegrant" name="writingTypeReceive" value="grant">
+                            <label for="grant">Grant</label><br>
+                            <input type="radio" id="trainingReceiveotherWriting" name="writingTypeReceive" value="otherWriting">
+                            <label for="otherWriting">Other</label><br>
+                        </div>
+                    </div>
+                    <div style="float:right; width:50%;padding-right: 10px;">
+                        <h4>What kind of training can you offer or facilitate?</h4>
+                        <input type="checkbox" id="trainingOfferwebinar" name="trainingTypeOffer" value="webinar">
+                        <label for="webinar">Webinar</label><br>
+                        <input type="checkbox" id="trainingOfferprotocol" name="trainingTypeOffer" value="protocol">
+                        <label for="protocol">Protocol</label><br>
+                        <input type="checkbox" id="trainingOffershortCourse" name="trainingTypeOffer" value="shortCourse">
+                        <label for="shortCourse">Short course</label><br>
+                        <input type="checkbox" id="trainingOfferdegreeProgram" name="trainingTypeOffer" value="degreeProgram" onclick="showMoreOriginal('trainingOffer','degreeProgram')">
+                        <label for="degreeProgram">Degree program</label><br>
+                        <input type="checkbox" id="trainingOfferapprenticeship" name="trainingTypeOffer" value="apprenticeship">
+                        <label for="apprenticeship">Apprenticeship</label><br>
+                        <input type="checkbox" id="trainingOffersoftSkills" name="trainingTypeOffer" value="softSkills">
+                        <label for="softSkills">Soft skills training</label><br>
+                        <input type="checkbox" id="trainingOfferwriting" name="trainingTypeOffer" value="writing" onclick="showMoreOriginal('trainingOffer','writing')">
+                        <label for="writing">Writing</label><br>
+                        <input type="checkbox" id="trainingOfferotherTraining" name="trainingTypeOffer" value="otherTraining">
+                        <label for="otherTraining">Other</label><br>
+                        <div id="trainingOfferdegreeProgramQuestions" style="display: none; float:right;">
+                            <label>What degree program are you interested in?</label><br>
+                            <input type="radio" id="trainingOfferbachelors" name="degreeProgramTypeOffer" value="bachelors">
+                            <label for="bachelors">Bachelor's</label><br>
+                            <input type="radio" id="trainingOffermasters" name="degreeProgramTypeOffer" value="masters">
+                            <label for="masters">Master's</label><br>
+                            <input type="radio" id="trainingOfferphd" name="degreeProgramTypeOffer" value="phd">
+                            <label for="phd">PhD</label><br>
+                            <input type="radio" id="trainingOfferotherDegree" name="degreeProgramTypeOffer" value="otherDegree">
+                            <label for="otherDegree">Other</label><br>
+                        </div>
+                        <div id="trainingOfferwritingQuestions" style="display: none; float:right;">
+                            <label>What type of writing training are you interested in?</label><br>
+                            <input type="radio" id="trainingOffermanuscript" name="writingTypeOffer" value="manuscript">
+                            <label for="manuscript">Manuscript</label><br>
+                            <input type="radio" id="trainingOffergrant" name="writingTypeOffer" value="grant">
+                            <label for="grant">Grant</label><br>
+                            <input type="radio" id="trainingOfferotherWriting" name="writingTypeOffer" value="otherWriting">
+                            <label for="otherWriting">Other</label><br>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex;">
+                    <div style="float:left; width:50%;">
+                        <h4>What kind of funding do you hope to Receive?</h4>
+                        <input type="checkbox" id="fundingReceivepilotGrant" name="fundingTypeReceive" value="pilotGrant" onclick="showMoreOriginal('fundingReceive','pilotGrant')">
+                        <label for="pilotGrant">Pilot Grant</label><br>
+                        <input type="checkbox" id="fundingReceivelargeScaleGrant" name="fundingTypeReceive" value="largeScaleGrant">
+                        <label for="largeScaleGrant">Large Scale Grant</label><br>
+                        <input type="checkbox" id="fundingReceiveloan" name="fundingTypeReceive" value="loan">
+                        <label for="loan">Loan</label><br>
+                        <input type="checkbox" id="fundingReceivecompanyInvestment" name="fundingTypeReceive" value="companyInvestment">
+                        <label for="companyInvestment">Company Investment</label><br>
+                        <input type="checkbox" id="fundingReceivecrowdfunding" name="fundingTypeReceive" value="crowdfunding">
+                        <label for="crowdfunding">Crowdfunding</label><br>
+                        <input type="checkbox" id="fundingReceiveotherFunding" name="fundingTypeReceive" value="otherfunding">
+                        <label for="otherfunding">Other</label><br>
+                        <div id="fundingReceivepilotGrantQuestions" style="display: none;">
+                            <label>What pilot grant are you interested in?</label><br>
+                            <input type="radio" id="trainingReceivebachelors" name="pilotGrantTypeReceive" value="pilotGrantResearch">
+                            <label for="bachelors">Research</label><br>
+                            <input type="radio" id="trainingReceivemasters" name="pilotGrantTypeReceive" value="pilotGrantClinical">
+                            <label for="masters">Clinical Program</label><br>
+                            <input type="radio" id="trainingReceivephd" name="pilotGrantTypeReceive" value="pilotGrantIdea">
+                            <label for="phd">Innovative Idea</label><br>
+                            <input type="radio" id="trainingReceiveotherDegree" name="pilotGrantTypeReceive" value="pilotGrantOther">
+                            <label for="otherDegree">Other</label><br>
+                        </div>
+                    </div>
+                    <div style="float:right; width:50%;padding-right: 10px;">
+                        <h4>What kind of funding can you offer or facilitate?</h4>
+                        <input type="checkbox" id="fundingOfferpilotGrant" name="fundingTypeOffer" value="pilotGrant" onclick="showMoreOriginal('fundingOffer','pilotGrant')">
+                        <label for="pilotGrant">Pilot Grant</label><br>
+                        <input type="checkbox" id="fundingOfferlargeScaleGrant" name="fundingTypeOffer" value="largeScaleGrant">
+                        <label for="largeScaleGrant">Large Scale Grant</label><br>
+                        <input type="checkbox" id="fundingOfferloan" name="fundingTypeOffer" value="loan">
+                        <label for="loan">Loan</label><br>
+                        <input type="checkbox" id="fundingOffercompanyInvestment" name="fundingTypeOffer" value="companyInvestment">
+                        <label for="companyInvestment">Company Investment</label><br>
+                        <input type="checkbox" id="fundingOffercrowdfunding" name="fundingTypeOffer" value="crowdfunding">
+                        <label for="crowdfunding">Crowdfunding</label><br>
+                        <input type="checkbox" id="fundingOfferotherFunding" name="fundingTypeOffer" value="otherfunding">
+                        <label for="otherfunding">Other</label><br>
+                        <div id="fundingOfferpilotGrantQuestions" style="display: none;">
+                            <label>What pilot grant are you interested in?</label><br>
+                            <input type="radio" id="trainingReceivebachelors" name="pilotGrantTypeOffer" value="pilotGrantResearch">
+                            <label for="bachelors">Research</label><br>
+                            <input type="radio" id="trainingReceivemasters" name="pilotGrantTypeOffer" value="pilotGrantClinical">
+                            <label for="masters">Clinical Program</label><br>
+                            <input type="radio" id="trainingReceivephd" name="pilotGrantTypeOffer" value="pilotGrantIdea">
+                            <label for="phd">Innovative Idea</label><br>
+                            <input type="radio" id="trainingReceiveotherDegree" name="pilotGrantTypeOffer" value="pilotGrantOther">
+                            <label for="otherDegree">Other</label><br>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex">
+                    <div style="float:left; width:50%;">
+                        <h4>What kind of mentorship do you wish to receive?</h4>
+                        <div id="mentorship-type">
+                            <input type="radio" name="mentorship-type-receive" value="one-on-one"> One-on-one mentorship<br>
+                            <input type="radio" name="mentorship-type-receive" value="group"> Group mentorship<br>
+                            <input type="radio" name="mentorship-type-receive" value="supervision"> Supervision<br>
+                            <input type="radio" name="mentorship-type-receive" value="other"> Other<br>
+                        </div>
+                        <div>
+                            <h4>How long will you need this mentorship for?</h4>
+                            <div id="mentorship-duration">
+                                <input type="radio" name="mentorship-duration-receive" value="one-off"> One-off<br>
+                                <input type="radio" name="mentorship-duration-receive" value="short-term"> Short-term (e.g., for a specific task)<br>
+                                <input type="radio" name="mentorship-duration-receive" value="long-term"> Long-term (e.g., months to years)<br>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>What are you looking for mentorship in?</h4>
+                            <div id="mentorship-topic">
+                                <input type="checkbox" name="mentorship-topic-receive" value="content-expertise"> Content expertise<br>
+                                <input type="checkbox" name="mentorship-topic-receive" value="manuscript-writing"> Manuscript writing<br>
+                                <input type="checkbox" name="mentorship-topic-receive" value="grant-writing"> Grant writing<br>
+                                <input type="checkbox" name="mentorship-topic-receive" value="career-development"> Career development<br>
+                                <input type="checkbox" name="mentorship-topic-receive" value="sponsorship"> Sponsorship (i.e., identifying new opportunities)<br>
+                                <input type="checkbox" name="mentorship-topic-receive" value="other"> Other<br>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="float:right; width:50%;padding-right:10px;">
+                        <h4>What kind of mentorship can you offer or facilitate?</h4>
+                        <div id="mentorship-type-offer-offer">
+                            <input type="radio" name="mentorship-type-offer" value="one-on-one"> One-on-one mentorship<br>
+                            <input type="radio" name="mentorship-type-offer" value="group"> Group mentorship<br>
+                            <input type="radio" name="mentorship-type-offer" value="supervision"> Supervision<br>
+                            <input type="radio" name="mentorship-type-offer" value="other"> Other<br>
+                        </div>
+                        <div>
+                            <h4>How long can you offer this mentorship for?</h4>
+                            <div id="mentorship-duration-offer">
+                                <input type="radio" name="mentorship-duration-offer" value="one-off"> One-off<br>
+                                <input type="radio" name="mentorship-duration-offer" value="short-term"> Short-term (e.g., for a specific task)<br>
+                                <input type="radio" name="mentorship-duration-offer" value="long-term"> Long-term (e.g., months to years)<br>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>What can you offer or facilitate mentorship in?</h4>
+                            <div id="mentorship-topic-offer">
+                                <input type="checkbox" name="mentorship-topic-offer" value="content-expertise"> Content expertise<br>
+                                <input type="checkbox" name="mentorship-topic-offer" value="manuscript-writing"> Manuscript writing<br>
+                                <input type="checkbox" name="mentorship-topic-offer" value="grant-writing"> Grant writing<br>
+                                <input type="checkbox" name="mentorship-topic-offer" value="career-development"> Career development<br>
+                                <input type="checkbox" name="mentorship-topic-offer" value="sponsorship"> Sponsorship (i.e., identifying new opportunities)<br>
+                                <input type="checkbox" name="mentorship-topic-offer" value="other"> Other<br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="columnL">
-                <label for="resourcesNeeded">Select resources you have <u>needed</u> in the past:</label>
+                <label for="howToConnect">How would you like to be connected?</label>
             </div>
             <div class="columnR">
-                <div id="resourcesNeeded">
-                    <label for="trainingExperience"><input type="checkbox" name="resourcosNeeded" value="trainingExperience"> Training Experience</label><br>
-                    <label for="researchFunding"><input type="checkbox" name="resourcosNeeded" value="researchFunding"> Research Funding</label><br>
-                    <label for="mentorship"><input type="checkbox" name="resourcosNeeded" value="mentorship"> Mentorship</label><br>
-                    <label for="other"><input type="checkbox" name="resourcosNeeded" value="other"> Other</label><br>
-                  </div>                  
+                <select id="howToConnect" name="howToConnect" required style="white-space:normal; max-width: 150px;">
+                    <option value="null">Select</option>
+                    <option value="bachelor">Direct Matching (potential matches receive your info and can reach you)</option>
+                    <option value="master">Optional Matching (potential matches receive your info if desired)</option>
+                    <option value="other">Other</option>
+                </select>
             </div>
             <div class="columnL">
-                <label for="needed"> Please tell us more about the resource(s) you have <u>needed</u> in the past<br>
-                                Were you successful in finding this resource? How did you find it? What would have been helpful for your search?</label>
-            </div>
-            <div class="columnR">
-                <textarea id="needed" name="needed" rows="8" required></textarea><br>
-            </div>
-            <div class="columnL">
-                <label for="resourcesProvided">Select resources you have <u>provided</u> in the past:</label>
-            </div>
-            <div class="columnR">
-                <div id="resourcesProvided">
-                    <label for="trainingExperience"><input type="checkbox" name="resourcosProvided" value="trainingExperience"> Training Experience</label><br>
-                    <label for="researchFunding"><input type="checkbox" name="resourcosProvided" value="researchFunding"> Research Funding</label><br>
-                    <label for="mentorship"><input type="checkbox" name="resourcosProvided" value="mentorship"> Mentorship</label><br>
-                    <label for="other"><input type="checkbox" name="resourcosProvided" value="other"> Other</label><br>
-                  </div>                  
-            </div>
-            <div class="columnL">
-                <label for="provided">Please tell us more about the resource(s) that you have <u>provided</u> in the past<br>
-                                        How did you let people know? What would be helpful in finding ways to provide resources in the future?</label>
-            </div>
-            <div class="columnR">
-                <textarea id="provided" name="provided" rows="8" required></textarea><br>
-            </div>
-            <div class="columnL">
-                <label for="goals">Your goals for participating in The Village</label>
-            </div>
-            <div class="columnR">
-                <input type="text" id="goals" name="goals" required><br>
-            </div>
-            <div class="columnL">
-                <label for="suggestions">Suggestions for The Village</label>
+                <label for="suggestions">What else would you like to see as part of The Village?</label>
             </div>
             <div class="columnR">
                 <input type="text" id="suggestions" name="suggestions" required><br>
+            </div>
+            <div class="columnL">
+                <label for="goals">What else could you offer or facilitate for The Village?</label>
+            </div>
+            <div class="columnR">
+                <input type="text" id="goals" name="goals" required><br>
             </div>
             <br><br>
         </div>
@@ -248,7 +474,7 @@
             <h3>Social Networks</h3>
             <p id="linkedlnContainer">&nbsp;&nbsp;&nbsp;Linkedln <span class="user-profile-button" onclick="showInput('linkedln')" id="linkedln">Add</span></p>
             <div id="linkedln-input" style="display: none;">
-                <input type="text" id="linkedin-link" placeholder="Enter your LinkedIn profile URL">
+                <input type="text" id="linkedln-link" placeholder="Enter your LinkedIn profile URL">
                 <button class="user-profile-button" onclick="addSocialNetwork('linkedln')" data-network>Save</button>
             </div>
             
@@ -258,7 +484,7 @@
                 <button class="user-profile-button" onclick="addSocialNetwork('gmail')">Save</button>
             </div>
             
-            <p id="researchGateContainer">&nbsp;&nbsp;&nbsp;ResearchGate <span class="user-profile-button" onclick="showInput('researchgate')" id="researchGate">Add</span></p>
+            <p id="researchGateContainer">&nbsp;&nbsp;&nbsp;ResearchGate <span class="user-profile-button" onclick="showInput('researchgate')" id="researchgate">Add</span></p>
             <div id="researchgate-input" style="display: none;">
                 <input type="text" id="researchgate-link" placeholder="Enter your ResearchGate profile URL">
                 <button class="user-profile-button" onclick="addSocialNetwork('researchgate')">Save</button>
@@ -369,13 +595,69 @@
                     </div>
                     <div class="columnR">
                         <div id="typeOfJob1">
-                            <label for="Research"><input type="checkbox" name="typeoJob" value="Research" id="typeoJobResearch"> Research</label><br>
-                            <label for="Clinical"><input type="checkbox" name="typeoJob" value="Clinical" id="typeoJobClinical"> Clinical</label><br>
-                            <label for="Business"><input type="checkbox" name="typeoJob" value="Business" id="typeoJobBusiness"> Business</label><br>
-                            <label for="NGO"><input type="checkbox" name="typeoJob" value="NGO" id="typeoJobNGO"> NGO</label><br>
-                            <label for="Funding"><input type="checkbox" name="typeoJob" value="Funding" id="typeoJobFunding"> Funding</label><br>
-                            <label for="Publishing"><input type="checkbox" name="typeoJob" value="Publishing" id="typeoJobPublishing"> Publishing</label><br>
-                            <label for="other"><input type="checkbox" name="typeoJob" value="other" id="typeoJob" id="typeoJobother"> other</label><br>
+                            <label for="Research"><input type="checkbox" name="typeoJob" value="Research" onclick="showArea('research')" id="typeoJobResearch1"> Research</label><br>
+                            <label for="Clinical"><input type="checkbox" name="typeoJob" value="Clinical" onclick="showArea('clinical')" id="typeoJobClinical1"> Clinical</label><br>
+                            <label for="Business"><input type="checkbox" name="typeoJob" value="Business" onclick="showArea('business')" id="typeoJobBusiness1"> Business</label><br>
+                            <label for="NGO"><input type="checkbox" name="typeoJob" value="NGO" onclick="showArea('ngo')" id="typeoJobNGO1"> NGO</label><br>
+                            <label for="Funding"><input type="checkbox" name="typeoJob" value="Funding" onclick="showArea('funding')" id="typeoJobFunding1"> Funding</label><br>
+                            <label for="Publishing"><input type="checkbox" name="typeoJob" value="Publishing" onclick="showArea('publishing')" id="typeoJobPublishing1"> Publishing</label><br>
+                            <label for="other"><input type="checkbox" name="typeoJob" value="other" onclick="showArea('specifyMore')" id="typeoJobspecifyMore1"> other</label><br>
+                        </div>                  
+                    </div>
+                    <div id="research" style="display:none">
+                        <div class="columnL">
+                            <label for="researchArea">What is your research area?</label>
+                        </div>
+                        <div class="columnR">
+                            <input type="text" id="researchArea1" name="researchArea" required><br>
+                        </div>
+                    </div>
+                    <div id="clinical" style="display:none">
+                        <div class="columnL">
+                            <label for="clinicalSpecialty">What is your clinical specialty</label>
+                        </div>
+                        <div class="columnR">
+                            <input type="text" id="clinicalSpecialty1" name="clinicalSpecialty" required><br>
+                        </div>
+                    </div>
+                    <div id="business" style="display:none">
+                        <div class="columnL">
+                            <label for="tellMoreArea">Please tell us more about your role in business</label>
+                        </div>
+                        <div class="columnR">
+                            <input type="text" id="tellMoreBusiness" name="tellMoreArea" required><br>
+                        </div>
+                    </div>
+                    <div id="ngo" style="display:none">
+                        <div class="columnL">
+                            <label for="tellMoreArea">Please tell us more about your role in NGO</label>
+                        </div>
+                        <div class="columnR">
+                            <input type="text" id="tellMoreArea" name="tellMoreArea" required><br>
+                        </div>
+                    </div>
+                    <div id="funding" style="display:none">
+                        <div class="columnL">
+                            <label for="tellMoreArea">Please tell us more about your role in funding</label>
+                        </div>
+                        <div class="columnR">
+                            <input type="text" id="tellMoreArea" name="tellMoreArea" required><br>
+                        </div>
+                    </div>
+                    <div id="publishing" style="display:none">
+                        <div class="columnL">
+                            <label for="tellMoreArea">Please tell us more about your role in publishing</label>
+                        </div>
+                        <div class="columnR">
+                            <input type="text" id="tellMoreArea" name="tellMoreArea" required><br>
+                        </div>
+                    </div>
+                    <div id="specifyMore" style="display:none">
+                        <div class="columnL">
+                            <label for="otherSpecify">Please specify:</label>
+                        </div>
+                        <div class="columnR">
+                            <input type="text" id="otherSpecify" name="otherSpecify" required><br>
                         </div>
                     </div>
                     <div class="columnL">
@@ -384,53 +666,192 @@
                     <div class="columnR">
                         <input type="text" id="yearsInJob1" name="yearsInJob" required><br>
                     </div>
+                    <br>
+                    <div class="hellothere" style="display:inline-block;">
+                        <div style="display:flex;">
+                            <div style="float:left; width:50%;">
+                                <h4>What kind of training do you hope to Receive?</h4>
+                                <div id="trainingTypeReceive1">
+                                    <label><input type="checkbox" id="trainingReceivewebinar1" name="trainingTypeReceive" value="webinar" />Webinar</label>
+                                    <label><input type="checkbox" id="trainingReceiveprotocol1" name="trainingTypeReceive" value="protocol" />Protocol</label>
+                                    <label><input type="checkbox" id="trainingReceiveshortCourse1" name="trainingTypeReceive" value="shortCourse" />Short course</label>
+                                    <label><input type="checkbox" id="trainingReceivedegreeProgram1" name="trainingTypeReceive" value="degreeProgram" onclick="showMore('trainingReceivedegreeProgram1','trainingTypeReceive', 'DegreeProgram','1')">Degree program</label>
+                                    <label><input type="checkbox" id="trainingReceiveapprenticeship1" name="trainingTypeReceive" value="apprenticeship">Apprenticeship</label>
+                                    <label><input type="checkbox" id="trainingReceivesoftSkills1" name="trainingTypeReceive" value="softSkills">Soft skills training</label>
+                                    <label><input type="checkbox" id="trainingReceivewriting1" name="trainingTypeReceive" value="writing" onclick="showMore('trainingReceivewriting1','trainingTypeReceive','Writing','1')">Writing</label>
+                                    <label><input type="checkbox" id="trainingReceiveotherTraining1" name="trainingTypeReceive" value="otherTraining">Other</label>
+                                </div>
+                                <div id="trainingTypeReceiveDegreeProgram1" style="display: none;">
+                                    <h4>What degree program are you interested in?</h4>
+                                    <label><input type="radio" id="trainingReceivebachelors1" name="degreeProgramTypeReceive" value="bachelors">Bachelor's</label>
+                                    <label><input type="radio" id="trainingReceivemasters1" name="degreeProgramTypeReceive" value="masters">Master's</label>
+                                    <label><input type="radio" id="trainingReceivephd1" name="degreeProgramTypeReceive" value="phd">PhD</label>
+                                    <label><input type="radio" id="trainingReceiveotherDegree1" name="degreeProgramTypeReceive" value="otherDegree">Other</label>
+                                    <a href="#" onclick="event.preventDefault();resetRadioButtons('trainingTypeReceiveDegreeProgram1')">Reset</a>
+                                </div>
+                                
+                                <div id="trainingTypeReceiveWriting1" style="display: none;">
+                                    <h4>What type of writing training are you interested in?</h4>
+                                    <label><input type="radio" id="trainingReceivemanuscript1" name="writingTypeReceive" value="manuscript">Manuscript</label>
+                                    <label><input type="radio" id="trainingReceivegrant1" name="writingTypeReceive" value="grant">Grant</label>
+                                    <label><input type="radio" id="trainingReceiveotherWriting1" name="writingTypeReceive" value="otherWriting">Other</label>
+                                    <a href="#" onclick="event.preventDefault();resetRadioButtons('trainingTypeReceiveWriting1')">Reset</a>
+                                </div>
+                            </div>
+                            <div style="float:right; width:50%;padding-right: 10px;">
+                                <h4>What kind of training can you offer or facilitate?</h4>
+                                <div id="trainingTypeOffer1">
+                                    <label><input type="checkbox" id="trainingOfferwebinar1" name="trainingTypeOffer" value="webinar">Webinar</label>
+                                    <label><input type="checkbox" id="trainingOfferprotocol1" name="trainingTypeOffer" value="protocol">Protocol</label>
+                                    <label><input type="checkbox" id="trainingOffershortCourse1" name="trainingTypeOffer" value="shortCourse">Short course</label>
+                                    <label><input type="checkbox" id="trainingOfferdegreeProgram1" name="trainingTypeOffer" value="degreeProgram" onclick="showMore('trainingOfferdegreeProgram1','trainingTypeOffer','DegreeProgram','1')">Degree program</label>
+                                    <label><input type="checkbox" id="trainingOfferapprenticeship1" name="trainingTypeOffer" value="apprenticeship">Apprenticeship</label>
+                                    <label><input type="checkbox" id="trainingOffersoftSkills1" name="trainingTypeOffer" value="softSkills">Soft skills training</label>
+                                    <label><input type="checkbox" id="trainingOfferwriting1" name="trainingTypeOffer" value="writing" onclick="showMore('trainingOfferwriting1','trainingTypeOffer','Writing','1')">Writing</label>
+                                    <label><input type="checkbox" id="trainingOfferotherTraining1" name="trainingTypeOffer" value="otherTraining">Other</label>
+                                </div>
+                                <div id="trainingTypeOfferDegreeProgram1" style="display: none;">
+                                    <h4>What degree program are you interested in?</h4>
+                                    <label><input type="radio" id="trainingOfferbachelors1" name="degreeProgramTypeOffer" value="bachelors">Bachelor's</label>
+                                    <label><input type="radio" id="trainingOffermasters1" name="degreeProgramTypeOffer" value="masters">Master's</label>
+                                    <label><input type="radio" id="trainingOfferphd1" name="degreeProgramTypeOffer" value="phd">PhD</label>
+                                    <label><input type="radio" id="trainingOfferotherDegree1" name="degreeProgramTypeOffer" value="otherDegree">Other</label>
+                                    <a href="#" onclick="event.preventDefault();resetRadioButtons('trainingTypeOfferDegreeProgram1')">Reset</a>
+                                </div>
+                                <div id="trainingTypeOfferWriting1" style="display: none;">
+                                    <h4>What type of writing training are you interested in?</h4>
+                                    <label><input type="radio" id="trainingOffermanuscript1" name="writingTypeOffer" value="manuscript">Manuscript</label>
+                                    <label><input type="radio" id="trainingOffergrant1" name="writingTypeOffer" value="grant">Grant</label>
+                                    <label><input type="radio" id="trainingOfferotherWriting1" name="writingTypeOffer" value="otherWriting">Other</label>
+                                    <a href="#" onclick="event.preventDefault();resetRadioButtons('trainingTypeOfferWriting1')">Reset</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display:flex;">
+                            <div style="float:left; width:50%;">
+                                <h4>What kind of funding do you hope to Receive?</h4>
+                                <div id="fundingTypeReceive1">
+                                    <label><input type="checkbox" id="fundingReceivepilotGrant1" name="fundingTypeReceive" value="pilotGrant" onclick="showMore('fundingReceivepilotGrant1','fundingTypeReceive','PilotGrant','1')">Pilot Grant</label>
+                                    <label><input type="checkbox" id="fundingReceivelargeScaleGrant1" name="fundingTypeReceive" value="largeScaleGrant">Large Scale Grant</label>
+                                    <label><input type="checkbox" id="fundingReceiveloan1" name="fundingTypeReceive" value="loan">Loan</label>
+                                    <label><input type="checkbox" id="fundingReceivecompanyInvestment1" name="fundingTypeReceive" value="companyInvestment">Company Investment</label>
+                                    <label><input type="checkbox" id="fundingReceivecrowdfunding1" name="fundingTypeReceive" value="crowdfunding">Crowdfunding</label>
+                                    <label><input type="checkbox" id="fundingReceiveotherFunding1" name="fundingTypeReceive" value="otherfunding">Other</label>
+                                </div>
+                                <div id="fundingTypeReceivePilotGrant1" style="display: none;">
+                                    <h4>What pilot grant are you interested in?</h4>
+                                    <label><input type="radio" id="fundingReceiveresearch1" name="pilotGrantTypeReceive" value="research">Research</label>
+                                    <label><input type="radio" id="fundingReceiveclinical1" name="pilotGrantTypeReceive" value="clinical">Clinical Program</label>
+                                    <label><input type="radio" id="fundingReceiveidea1" name="pilotGrantTypeReceive" value="idea">Innovative Idea</label>
+                                    <label><input type="radio" id="fundingReceiveother1" name="pilotGrantTypeReceive" value="other">Other</label>
+                                    <a href="#" onclick="event.preventDefault();resetRadioButtons('fundingTypeReceivePilotGrant1')">Reset</a>
+                                </div>
+                            </div>
+                            <div style="float:right; width:50%;padding-right: 10px;">
+                                <h4>What kind of funding can you offer or facilitate?</h4>
+                                <div id="fundingTypeOffer1">
+                                    <label><input type="checkbox" id="fundingOfferpilotGrant1" name="fundingTypeOffer" value="pilotGrant" onclick="showMore('fundingOfferpilotGrant1','fundingTypeOffer','PilotGrant','1')">Pilot Grant</label>
+                                    <label><input type="checkbox" id="fundingOfferlargeScaleGrant1" name="fundingTypeOffer" value="largeScaleGrant">Large Scale Grant</label>
+                                    <label><input type="checkbox" id="fundingOfferloan1" name="fundingTypeOffer" value="loan">Loan</label>
+                                    <label> <input type="checkbox" id="fundingOffercompanyInvestment1" name="fundingTypeOffer" value="companyInvestment">Company Investment</label>
+                                    <label><input type="checkbox" id="fundingOffercrowdfunding1" name="fundingTypeOffer" value="crowdfunding">Crowdfunding</label>
+                                    <label><input type="checkbox" id="fundingOfferotherFunding1" name="fundingTypeOffer" value="otherfunding">Other</label>
+                                </div>
+                                <div id="fundingTypeOfferPilotGrant1" style="display: none;">
+                                    <h4>What pilot grant are you interested in?</h4>
+                                    <label><input type="radio" id="fundingOfferresearch1" name="pilotGrantTypeOffer" value="research">Research</label>
+                                    <label><input type="radio" id="fundingOfferclinicalProgram1" name="pilotGrantTypeOffer" value="clinical">Clinical Program</label>
+                                    <label><input type="radio" id="fundingOfferidea1" name="pilotGrantTypeOffer" value="idea">Innovative Idea</label>
+                                    <label><input type="radio" id="fundingOfferother1" name="pilotGrantTypeOffer" value="other">Other</label>
+                                    <a href="#" onclick="event.preventDefault();resetRadioButtons('fundingTypeOfferPilotGrant1')">Reset</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display:flex">
+                            <div style="float:left; width:50%;">
+                                <h4>What kind of mentorship do you wish to receive?</h4>
+                                <div id="mentorshipTypeReceive1">
+                                    <label><input type="radio" id="mentorshipReceiveoneOnOne1" name="mentorship-type-receive" value="oneOnOne"> One-on-one mentorship</label>
+                                    <label><input type="radio" id="mentorshipReceivegroup1" name="mentorship-type-receive" value="group"> Group mentorship</label>
+                                    <label><input type="radio" id="mentorshipReceivesupervision1" name="mentorship-type-receive" value="supervision"> Supervision</label>
+                                    <label><input type="radio" id="mentorshipReceiveother1" name="mentorship-type-receive" value="other"> Other</label>
+                                </div>
+                                <a href="#" onclick="event.preventDefault();resetRadioButtons('mentorshipTypeReceive1')">Reset</a>
+                                <div>
+                                    <h4>How long will you need this mentorship for?</h4>
+                                    <div id="mentorshipTypeReceiveDuration1">
+                                        <label><input type="radio" id="mentorshipReceiveoneOff1" name="mentorship-duration-receive" value="oneOff"> One-off</label>
+                                        <label><input type="radio" id="mentorshipReceiveshortTerm1" name="mentorship-duration-receive" value="shortTerm"> Short-term (e.g., for a specific task)</label>
+                                        <label><input type="radio" id="mentorshipReceivelongTerm1" name="mentorship-duration-receive" value="longTerm"> Long-term (e.g., months to years)</label>
+                                    </div>
+                                    <a href="#" onclick="event.preventDefault();resetRadioButtons('mentorshipTypeReceiveDuration1')">Reset</a>
+                                </div>
+                                <div>
+                                    <h4>What are you looking for mentorship in?</h4>
+                                    <div id="mentorshipTypeReceiveCategory1">
+                                        <label><input type="checkbox" id="mentorshipReceivecontentExpertise1" name="mentorship-topic-receive" value="contentExpertise"> Content expertise</label>
+                                        <label><input type="checkbox" id="mentorshipReceivemanuscriptWriting1" name="mentorship-topic-receive" value="manuscriptWriting"> Manuscript writing</label>
+                                        <label><input type="checkbox" id="mentorshipReceivegrantWriting1" name="mentorship-topic-receive" value="grantWriting"> Grant writing</label>
+                                        <label><input type="checkbox" id="mentorshipReceivecareerDevelopment1" name="mentorship-topic-receive" value="careerDevelopment"> Career development</label>
+                                        <label><input type="checkbox" id="mentorshipReceivesponsorship1" name="mentorship-topic-receive" value="sponsorship"> Sponsorship (i.e., identifying new opportunities)</label>
+                                        <label><input type="checkbox" id="mentorshipReceiveother1" name="mentorship-topic-receive" value="other"> Other</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="float:right; width:50%;padding-right:10px;">
+                                <h4>What kind of mentorship can you offer or facilitate?</h4>
+                                <div id="mentorshipTypeOffer1">
+                                    <label><input type="radio" id="mentorshipOfferoneOnOne1" name="mentorship-type-offer" value="oneOnOne"> One-on-one mentorship</label>
+                                    <label><input type="radio" id="mentorshipOffergroup1" name="mentorship-type-offer" value="group"> Group mentorship</label>
+                                    <label><input type="radio" id="mentorshipOffersupervision1" name="mentorship-type-offer" value="supervision"> Supervision</label>
+                                    <label><input type="radio" id="mentorshipOfferother1" name="mentorship-type-offer" value="other"> Other</label>
+                                    <a href="#" onclick="event.preventDefault();resetRadioButtons('mentorshipTypeOffer1')">Reset</a>
+                                </div>
+                                <div>
+                                    <h4>How long can you offer this mentorship for?</h4>
+                                    <div id="mentorshipTypeOfferDuration1">
+                                        <label><input type="radio" id="mentorshipROfferoneOff1" name="mentorship-duration-offer" value="oneOff"> One-off</label>
+                                        <label><input type="radio" id="mentorshipOffershortTerm1" name="mentorship-duration-offer" value="shortTerm"> Short-term (e.g., for a specific task)</label>
+                                        <label><input type="radio" id="mentorshipOfferlongTerm1" name="mentorship-duration-offer" value="longTerm"> Long-term (e.g., months to years)</label>
+                                    </div>
+                                    <a href="#" onclick="event.preventDefault();resetRadioButtons('mentorshipTypeOfferDuration1')">Reset</a>
+                                </div>
+                                <div>
+                                    <h4>What can you offer or facilitate mentorship in?</h4>
+                                    <div id="mentorshipTypeOfferCategory1">
+                                        <label><input type="checkbox" id="mentorshipOffercontentExpertise1" name="mentorship-topic-offer" value="contentExpertise"> Content expertise</label>
+                                        <label><input type="checkbox" id="mentorshipOffermanuscriptWriting1" name="mentorship-topic-offer" value="manuscriptWriting"> Manuscript writing</label>
+                                        <label><input type="checkbox" id="mentorshipOffergrantWriting1" name="mentorship-topic-offer" value="grantWriting"> Grant writing</label>
+                                        <label><input type="checkbox" id="mentorshipOffercareerDevelopment1" name="mentorship-topic-offer" value="careerDevelopment"> Career development</label>
+                                        <label><input type="checkbox" id="mentorshipOffersponsorship1" name="mentorship-topic-offer" value="sponsorship"> Sponsorship (i.e., identifying new opportunities)</label>
+                                        <label><input type="checkbox" id="mentorshipOfferother1" name="mentorship-topic-offer" value="other"> Other</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="columnL">
-                        <label for="resourcesNeeded">Select resources you have <u>needed</u> in the past:</label>
+                        <label for="howToConnect">How would you like to be connected?</label>
                     </div>
                     <div class="columnR">
-                        <div id="resourcesNeeded1">
-                            <label for="trainingExperience"><input type="checkbox" name="resourcosNeeded" value="trainingExperience" id="resourcosNeededtrainingExperience"> Training Experience</label><br>
-                            <label for="researchFunding"><input type="checkbox" name="resourcosNeeded" value="researchFunding" id="resourcosNeededresearchFunding"> Research Funding</label><br>
-                            <label for="mentorship"><input type="checkbox" name="resourcosNeeded" value="mentorship" id="resourcosNeededmentorship"> Mentorship</label><br>
-                            <label for="other"><input type="checkbox" name="resourcosNeeded" value="other" id="resourcosNeededother"> Other</label><br>
-                          </div>                  
+                        <select id="howToConnect1" name="howToConnect" required style="white-space:normal; max-width: 150px;">
+                            <option value="null">Select</option>
+                            <option value="direct">Direct Matching (potential matches receive your info and can reach you)</option>
+                            <option value="optional">Optional Matching (potential matches receive your info if desired)</option>
+                            <option value="other">Other</option>
+                        </select>
                     </div>
                     <div class="columnL">
-                        <label for="needed"> Please tell us more about the resource(s) you have <u>needed</u> in the past<br>
-                                        Were you successful in finding this resource? How did you find it? What would have been helpful for your search?</label>
-                    </div>
-                    <div class="columnR">
-                        <textarea id="needed1" name="needed" rows="8" required></textarea><br>
-                    </div>
-                    <div class="columnL">
-                        <label for="resourcesProvided">Select resources you have <u>provided</u> in the past:</label>
-                    </div>
-                    <div class="columnR">
-                        <div id="resourcesProvided1">
-                            <label for="trainingExperience"><input type="checkbox" name="resourcosProvided" value="trainingExperience" id="resourcosProvidedtrainingExperience"> Training Experience</label><br>
-                            <label for="researchFunding"><input type="checkbox" name="resourcosProvided" value="researchFunding" id="resourcosProvidedresearchFunding"> Research Funding</label><br>
-                            <label for="mentorship"><input type="checkbox" name="resourcosProvided" value="mentorship" id="resourcosProvidedmentorship"> Mentorship</label><br>
-                            <label for="other"><input type="checkbox" name="resourcosProvided" value="other" id="resourcosProvidedother"> Other</label><br>
-                        </div>                  
-                    </div>
-                    <div class="columnL">
-                        <label for="provided">Please tell us more about the resource(s) that you have <u>provided</u> in the past<br>
-                                                How did you let people know? What would be helpful in finding ways to provide resources in the future?</label>
-                    </div>
-                    <div class="columnR">
-                        <textarea id="provided1" name="provided" rows="8" required></textarea><br>
-                    </div>
-                    <div class="columnL">
-                        <label for="goals">Your goals for participating in The Village</label>
-                    </div>
-                    <div class="columnR">
-                        <input type="text" id="goals1" name="goals" required><br>
-                    </div>
-                    <div class="columnL">
-                        <label for="suggestions">Suggestions for The Village</label>
+                        <label for="suggestions">What else would you like to see as part of The Village?</label>
                     </div>
                     <div class="columnR">
                         <input type="text" id="suggestions1" name="suggestions" required><br>
+                    </div>
+                    <div class="columnL">
+                        <label for="goals">What else could you offer or facilitate for The Village?</label>
+                    </div>
+                    <div class="columnR">
+                        <input type="text" id="goals1" name="goals" required><br>
                     </div>
                     <br>
                 </div>
@@ -484,5 +905,6 @@
     <script>
     </script>
     <script src="script.js"></script>
+    <script src="form.js"></script>
 </body>
 </html>
