@@ -440,6 +440,12 @@ html {
     background-color: green;
 }
 
+.matchButtonList{
+    background-color: transparent;
+    border:none;
+    cursor: pointer;
+}
+
 footer {
     color:white;
     padding: 10px;
