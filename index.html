@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>The Village</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="static/styling/faq.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
@@ -459,6 +460,12 @@
         <div id="user-list">
             <center id="noMatches"><span style="color:red">No matches yet.</span><br>In the meantime, you can go customize your profile</center>
         </div>
+        <div id="user-passed" class="center">
+            <button class="passedUserCollapsible">Users you passed</button>
+            <div class="passedUserCollapsibleContent">
+                <p id="nopassedusers">&nbsp;You haven't passed any users yet!</p>
+            </div>
+        </div>
         <div id="user-profile" style="display:none">
             <h3>Name: <span id="userName">Loading...</span></h3>
             <h3>Email: <span id="userEmail">Loading...</span></h3>
@@ -867,31 +874,41 @@
             </form>
         </div>
     </div>
-    <div id="user-questions" class="user-questions">
-        <h2 style="text-align:center;">FAQs</h3>
-        <h3>How do I sign up?</h3>
-        <ol>
-            <li>Go to the create account page</li>
-            <li>Choose your desired sign up method<span style="color:red">*</span></li>
-            <li>Complete the questionnaire</li>
-            <li>Check for a success notification</li>
-            <li>Go back to the login page and login with your credentials</li>
-        </ol>
-        <p style="color:red">*Recommended method: Sign up with google</p>
-        <h3>"You haven't signed up yet" notification</h3>
-        <p>Make sure you have actually completed the questionnaire.
-            If you didn't complete the questionnaire, you won't be allowed to create an account.
-            If that's the case, simply redo the questionnaire again and your account should be created.
-        </p>
-        <h3>Is there a fee with the service?</h3>
-        <p>There is no fee with the service. Everything is completely free.</p>
-        <h3>How does the matching process work?</h3>
-        <p>We take all the data that you submitted through the questionnaire and compare that with other user's data. </p>
-        <h3>When will I get my matches?</h3>
-        <p>We'll email you when we find a match. You'll be able to contact them on the "matches" page.</p>
-        <h3>What if I don't like the matches I received?</h3>
-        <p>You can press the pass button next to their name card on the "matches" page</p>
-    </div>
+    <div id="user-questions" class="user-questions" style="display:none">
+        <h1>FAQ</h1>
+          <ul>
+            <li>
+                <input type="checkbox" checked>
+                <i></i>
+                  <h2>How do I sign up?</h2>
+                  <p>Go to the create account page, choose your desired sign up method, and complete the questionnaire.</p>
+              </li>
+            <li>
+                <input type="checkbox" checked>
+                <i></i>
+                <h2>When will I get my matches?</h2>
+                <p>We'll email you when we find a match. You'll be able to contact them on the "matches" page.</p>
+            </li>
+            <li>
+                <input type="checkbox" checked>
+                <i></i>
+                <h2>What if I don't like the matches I received?</h2>
+                <p>You can press the pass button next to their name card on the "matches" page. If you decide to change your mind, you can unpass them at the bottom of the matches page.</p>
+            </li>
+            <li>
+                <input type="checkbox" checked>
+                <i></i>
+                <h2>Is there a fee with the service?</h2>
+                <p>There is no fee with the service. Everything is completely free.</p>
+            </li>
+                <li>
+                <input type="checkbox" checked>
+                <i></i>
+                <h2>How does the matching process work?</h2>
+                <p>We take all the data that you submitted through the questionnaire and compare that with other user's data using the latest AI GPT3.5 technology</p>
+            </li>
+          </ul>
+        </div>
     <footer>
         <div class="footer-content">
             <div class="footer-section-about">
@@ -905,6 +922,6 @@
     <script>
     </script>
     <script src="script.js"></script>
-    <script src="form.js"></script>
+    <script src="static/scripts/form.js"></script>
 </body>
 </html>

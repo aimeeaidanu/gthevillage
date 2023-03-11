@@ -127,7 +127,7 @@ html {
     left: 0;
     right: 0;
     margin: auto;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2), 0 10px 0 0 #90E76F inset;
     border-radius: 25px;
     background-color: #E0FAD6;
     width: 33%;
@@ -185,7 +185,7 @@ html {
     left: 0;
     right: 0;
     margin: auto;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2), 0 10px 0 0 #90E76F inset;
     border-radius: 25px;
     background-color: #E0FAD6;
     width: 33%;
@@ -220,6 +220,8 @@ html {
     background-color: #90E76F;
     color:white;
 }
+
+
 
 #overlay {
     position: fixed;
@@ -359,7 +361,7 @@ html {
     margin: auto;
     margin-bottom:50px;
     width: 50%;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2), 0 10px 0 0 #90E76F inset;
     border-radius: 25px;
     background-color: #E0FAD6;
     padding-left: 15px;
@@ -446,6 +448,54 @@ html {
     cursor: pointer;
 }
 
+#user-passed {
+    display: flex;
+    justify-content: center !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+.passedUserCollapsible {
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    background-color: #90E76F;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 33%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+}
+
+.passedUserCollapsible:hover {
+    background-color: #E0FAD6;
+    color: black;
+}
+
+.passedUserCollapsible:after {
+    content: '\002B';
+    color: white;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.active:after {
+    content: "\2212";
+}
+
+.passedUserCollapsibleContent {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    width:33%;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    background-color: #f1f1f1;
+}
+
 footer {
     color:white;
     padding: 10px;
@@ -466,13 +516,13 @@ footer {
 }
 
 @media(max-width:1500px){
-    .user-item{
+    .user-item,.passedUserCollapsible,.passedUserCollapsibleContent{
         width: 50%;
     }
 }
 
 @media(max-width:1100px){
-    .user-item{
+    .user-item,.passedUserCollapsible,.passedUserCollapsibleContent{
         width:75%;
     }
     .logo{
@@ -481,7 +531,7 @@ footer {
 }
 
 @media(max-width:1000px){
-    .user-item{
+    .user-item,.passedUserCollapsible,.passedUserCollapsibleContent{
         width:100%;
     }
     .welcome-section, .limbo-state, #user-questions{
@@ -526,7 +576,7 @@ footer {
         width: 70%;
     }
     #user-contact{
-        width:100%;
+        width:98%;
     }
 }
 
