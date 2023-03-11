@@ -81,7 +81,6 @@ function saveQuestionnaire(type) {
     var db = firebase.firestore();
     db.collection("users").doc(userEmail1).set(questionnaireData).then(function() {
         showAlert("Account created successfully!", "success");
-        matchUser(userEmail1);
         delay(3000);
         document.getElementById("user-section").style.display="block";
         document.getElementById("limbo-state").style.display="none";
@@ -135,6 +134,6 @@ function updateQuestionnaire() {
     db.collection("users").doc(userEmail1).set(questionnaireData).then(function() {
         showAlert("Data updated!", "success");
         delay(3000);
-        matchUser(userEmail1)
+        goToMatches()
     });
 }
