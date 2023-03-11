@@ -79,10 +79,28 @@ firebase.auth().onAuthStateChanged(async function (user) {
                 button.onclick = null;
                 button.classList.remove('user-profile-button')
                 var linkElement = document.createElement("a");
-                linkElement.href = "mailto:"+link;
+                linkElement.href = link;
                 linkElement.textContent = link;
                 button.innerHTML = ""
                 button.appendChild(linkElement)
+                // Add an edit button next to the social network link
+                var editButton = document.createElement("button");
+                editButton.classList.add('user-profile-button');
+                editButton.innerHTML = '<i class="fas fa-edit"></i>';
+                editButton.onclick = function() {
+                    var newLink = prompt("Enter the new link for " + networkName);
+                    if (newLink) {
+                        doc.ref.update({ link: newLink })
+                            .then(function() {
+                                linkElement.href = newLink;
+                                linkElement.textContent = newLink;
+                            })
+                            .catch(function(error) {
+                                console.error("Error updating social network link: ", error);
+                            });
+                    }
+                };
+                button.appendChild(editButton);
             });
         }).catch(function(error) {
             console.error("Error getting social networks: ", error);
@@ -99,29 +117,61 @@ firebase.auth().onAuthStateChanged(async function (user) {
                 // Iterate over the questionnaire data and create list items for each field with its value
                 for (var field in questionnaireData) {
                     // Check if the field has a value
-                    var questionnairefield = document.getElementById(field + "1");
-
-                    if (field == "typeOfJob" || field == "resourcesNeeded" || field == "resourcesProvided") {
+                    if(!document.getElementById(field + "1")){
+                        console.log(`%c${field}`, 'color:red')
+                        continue
+                    }
+                    if (field == "typeOfJob" || 
+                        field == "trainingTypeReceive" || field=="trainingTypeReceiveDegreeProgram" || field == "trainingTypeReceiveWriting" ||
+                        field == "trainingTypeOffer" || field=="trainingTypeOfferDegreeProgram" || field=="trainingTypeOfferWriting" ||
+                        field == "fundingTypeReceive" || field=="fundingTypeReceivePilotGrant" ||
+                        field == "fundingTypeOffer" || field=="fundingTypeOfferPilotGrant" ||
+                        field == "mentorshipTypeReceive" || field=="mentorshipTypeReceiveCategory" || field=="mentorshipTypeReceiveDuration" ||
+                        field == "mentorshipTypeOffer" || field=="mentorshipTypeOfferCategory" || field=="mentorshipTypeOfferDuration") {
                         var fieldsToSelect = questionnaireData[field].split(",");
                         
                         fieldsToSelect.forEach(function(item) {
                             if(field == "typeOfJob"){
-                                var checkbox = document.getElementById("typeoJob" + item);
-                            } else if (field == "resourcesNeeded"){
-                                var checkbox = document.getElementById("resourcosNeeded" + item)
-                            } else {
-                                var checkbox = document.getElementById("resourcosProvided" + item)
+                                var checkbox = document.getElementById("typeoJob" + item + "1");
+                            }else if(field == "trainingTypeReceive" || field == "trainingTypeReceiveDegreeProgram" || field == "trainingTypeReceiveWriting"){
+                                var checkbox = document.getElementById("trainingReceive"+item+"1" || field=="trainingTypeOfferWriting")
+                                if(checkbox == document.getElementById("trainingReceivedegreeProgram1")){
+                                    document.getElementById("trainingTypeReceiveDegreeProgram1").style.display='block';
+                                }else if(checkbox == document.getElementById("trainingReceivewriting1")){
+                                    document.getElementById("trainingTypeReceiveWriting1").style.display='block'
+                                }
+                            }else if(field == "trainingTypeOffer" || field=="trainingTypeOfferDegreeProgram" || field=="trainingTypeOfferWriting"){
+                                var checkbox = document.getElementById("trainingOffer"+item+"1")
+                                if(checkbox == document.getElementById("trainingOfferdegreeProgram1")){
+                                    document.getElementById("trainingTypeOfferDegreeProgram1").style.display='block';
+                                }else if(checkbox == document.getElementById("trainingOfferwriting1")){
+                                    document.getElementById("trainingTypeOfferWriting1").style.display='block'
+                                }      
+                            }else if(field == "fundingTypeReceive" || field=="fundingTypeReceivePilotGrant"){
+                                var checkbox = document.getElementById("fundingReceive"+item+"1")
+                                if(checkbox == document.getElementById("fundingReceivepilotGrant1")){
+                                    document.getElementById("fundingTypeReceivePilotGrant1").style.display='block';
+                                }
+                            }else if(field == "fundingTypeOffer" || field=="fundingTypeOfferPilotGrant"){
+                                var checkbox = document.getElementById("fundingOffer"+item+"1")
+                                if(checkbox == document.getElementById("fundingOfferpilotGrant1")){
+                                    document.getElementById("fundingTypeOfferPilotGrant1").style.display='block';
+                                }
+                            }else if(field == "mentorshipTypeReceive" || field=="mentorshipTypeReceiveCategory" || field=="mentorshipTypeReceiveDuration"){
+                                var checkbox = document.getElementById("mentorshipReceive"+item+"1")
+                            }else if(field == "mentorshipTypeOffer" || field=="mentorshipTypeOfferCategory" || field=="mentorshipTypeOfferDuration"){
+                                var checkbox = document.getElementById("mentorshipOffer"+item+"1")
                             }
-                            
                             if (checkbox) {
                                 checkbox.checked = true;
                             } else {
-                                console.log("Checkbox not found: " + item);
+                                console.log("%cCheckbox not found: " + item,'color:red');
                             }
                         });
-                    } else {
-                        questionnairefield.value = questionnaireData[field];
-                    }
+                    };
+                    var questionnairefield = document.getElementById(field + "1");
+
+                    questionnairefield.value = questionnaireData[field];
                 }
             } else {
                 console.log("No questionnaire data found for user " + userEmail1);
@@ -137,8 +187,12 @@ firebase.auth().onAuthStateChanged(async function (user) {
                 var matchEmail = doc.get("email");
                 // Get the social network data for the match
                 var infoRef = firebase.firestore().collection('users').doc(matchEmail)
+                const docRef = db.collection(`users/${user.email}/matches`).doc(matchEmail);
                 infoRef.get().then(infoSnapshot => {
-                    document.getElementById("noMatches").innerHTML = ""
+                    if(doc.data().passed == true){
+                        return;
+                    }
+                    document.getElementById("noMatches").innerHTML = "Your Matches:"
                     const socialData = infoSnapshot.data();
                     // Create a new user item and append it to the user list
                     const userItem = document.createElement("div");
@@ -152,10 +206,21 @@ firebase.auth().onAuthStateChanged(async function (user) {
                     userSubtitle.style.fontSize = "small";
                     userSubtitle.textContent = ` Location: ${socialData.location}`;
                     userTitle.appendChild(userSubtitle);
+                    const likesRef = firestore.collection(`users/${matchEmail}/likes`);
+                    const userLikeCount = document.createElement("h4")
+                    likesRef.get().then((querySnapshot) => {
+                        const numOfLikes = querySnapshot.size;
+                        userLikeCount.innerHTML = `${numOfLikes} likes`;
+                    }).catch((error) => {
+                        console.error("Error getting likes collection: ", error);
+                    });
+                    
                     const userDescription = document.createElement("p");
-                    userDescription.innerHTML = `<b>You both are:</b> ${socialData.commonInterests}`;
+                    userDescription.innerHTML = `<b>AI Analysis: </b>` + doc.data().similarities;;
                     userInfo.appendChild(userTitle);
-                    userInfo.appendChild(userDescription);
+                    userInfo.appendChild(userLikeCount)
+                    userInfo.appendChild(userDescription);  
+                    
                     const userButtons = document.createElement("div");
                     userButtons.classList.add("user-buttons");
                     const connectButton = document.createElement("button");
@@ -233,18 +298,18 @@ firebase.auth().onAuthStateChanged(async function (user) {
 
                     // Add a click event listener to the emojis button
                     emojisButton.addEventListener("click", async () => {
-                        console.log("liked!")
                         const userEmail = user.email;
                       
                         const userDoc = await db.collection(`users/${matchEmail}/likes`).doc(userEmail).get();
                         if (userDoc.exists) {
-                            console.log("sike")
-                          return;
+                            showAlert("You've already liked " + matchEmail + "!", "warn")
+                            return;
                         }
                       
-                        const userLikesRef = db.collection(`users/${userEmail}/likes`);
+                        const userLikesRef = db.collection(`users/${matchEmail}/likes`);
                         await userLikesRef.doc(userEmail).set({ likedAt: new Date() });
-                      });
+                        showAlert("Liked Profile", "success")
+                    });
 
                     //pass method
                     const userPassDiv = document.createElement('div');
@@ -265,6 +330,21 @@ firebase.auth().onAuthStateChanged(async function (user) {
                     passUserBtn.className = "passUser"
                     passUserBtn.textContent = "Pass";
 
+                    passUserBtn.addEventListener('click', function(){
+                        const userRef = db.collection('users').doc(user.email);
+                        userRef.collection('matches').doc(matchEmail).set({
+                          passed: true
+                        }, { merge: true })
+                        .then(() => {
+                          showAlert('Match passed!');
+                        }).then(()=>{
+                            window.location.reload()
+                        })
+                        .catch((error) => {
+                          console.error('Error passing match:', error);
+                        });
+                    })
+
                     userPassDiv.appendChild(closeUserPassDiv);
                     userPassDiv.appendChild(h3);
                     userPassDiv.appendChild(passUserBtn);
@@ -279,6 +359,9 @@ firebase.auth().onAuthStateChanged(async function (user) {
                 });
             });
         });
+        if(document.getElementById("limbo-state").style.display == "block"){
+            document.getElementById("user-section").style.display = "none";
+        }
     } else {
         if(document.getElementById("limbo-state").style.display == "block"){
             document.getElementById("welcome-section").style.display = "none"; 
@@ -538,8 +621,6 @@ document.getElementById("signinAccountGoogle").addEventListener('click', () => {
     });
 });
 
-  
-
 function createAccount() {
     userEmail1 = document.getElementById("createEmailBox").value;
     userPass1 = document.getElementById("createPasswordBox").value;
@@ -555,193 +636,114 @@ function createAccount() {
     });
 }
 
-function saveQuestionnaire(type) {
-    var userName = document.getElementById("name").value;
-    var username = document.getElementById("username").value;
-    var gender = document.getElementById("gender").value;
-    var highestDegree = document.getElementById("highestDegree").value;
-    var location = document.getElementById("location").value;
-    var nationality = document.getElementById("nationality").value;
-    var workLocations = document.getElementById("workLocations").value;
-    var workOrganizations = document.getElementById("workOrganizations").value;
-    var roleOrganization = document.getElementById("roleOrganization").value;
-    
-    var typeOfJobs = document.querySelectorAll('input[name=typeoJob]:checked');
-    var typeJobArray = Array.from(typeOfJobs).map(el => el.value);
-    var typeOfJobValues = typeJobArray.join(',');
-    
-    var yearsInJob = document.getElementById("yearsInJob").value;
-    
-    var resourcesNeeded = document.querySelectorAll('input[name=resourcosNeeded]:checked')
-    var resourcesNeedArray = Array.from(resourcesNeeded).map(el => el.value);
-    var resourcesNeededValues = resourcesNeedArray.join(',');
-    
-    var needed = document.getElementById("needed").value;
-    
-    var resourcesProvided = document.querySelectorAll('input[name=resourcosProvided]:checked');
-    var resourcesProvideArray = Array.from(resourcesProvided).map(el => el.value);
-    var resourcesProvidedValues = resourcesProvideArray.join(',');
-    
-    var provided = document.getElementById("provided").value;
-    var goals = document.getElementById("goals").value;
-    var suggestions = document.getElementById("suggestions").value;
-
-    // Save the questionnaire data to Firestore
-    var db = firebase.firestore();
-    db.collection("users").doc(userEmail1).set({
-        name: userName,
-        username: username,
-        gender: gender,
-        highestDegree: highestDegree,
-        location: location,
-        nationality: nationality,
-        workLocations: workLocations,
-        workOrganizations: workOrganizations,
-        roleOrganization: roleOrganization,
-        typeOfJob: typeOfJobValues,
-        yearsInJob: yearsInJob,
-        resourcesNeeded: resourcesNeededValues,
-        needed: needed,
-        resourcesProvided: resourcesProvidedValues,
-        provided: provided,
-        goals: goals,
-        suggestions: suggestions,
-    }).then(function(){
-        showAlert("Account created successfully!", "success");
-        delay(3000)
-        window.location.reload()
-    })
-}
-
-function retakeQuestionnaire(){
-    document.getElementById("updateQuestionnaireForm").style.display="block";
-    document.getElementById("mainQuestionnairePage").style.display="none"
-    document.getElementById("questionnaireFormInfo").innerHTML="Retake your questionnaire form. <a href='#' onclick='seeQuestionnaire()'>View your information</a>"
-}
-
-function seeQuestionnaire(){
-    document.getElementById("updateQuestionnaireForm").style.display="none";
-    document.getElementById("mainQuestionnairePage").style.display="block"
-    document.getElementById("questionnaireFormInfo").innerHTML="If you haven't taken the questionnaire or want to retake it, <a href='#' onclick='retakeQuestionnaire()'>click here</a>. Its important to keep your information updated for the most accurate matches"
-}
-
-function updateQuestionnaire() {
-    var userName = document.getElementById("name1").value;
-    var username = document.getElementById("username1").value;
-    var gender = document.getElementById("gender1").value;
-    var highestDegree = document.getElementById("highestDegree1").value;
-    var location = document.getElementById("location1").value;
-    var nationality = document.getElementById("nationality1").value;
-    var workLocations = document.getElementById("workLocations1").value;
-    var workOrganizations = document.getElementById("workOrganizations1").value;
-    var roleOrganization = document.getElementById("roleOrganization1").value;
-    
-    var typeOfJobs = document.querySelectorAll('input[name=typeoJob]:checked');
-    var typeJobArray = Array.from(typeOfJobs).map(el => el.value);
-    var typeOfJobValues = typeJobArray.join(',');
-    
-    var yearsInJob = document.getElementById("yearsInJob1").value;
-    
-    var resourcesNeeded = document.querySelectorAll('input[name=resourcosNeeded]:checked')
-    var resourcesNeedArray = Array.from(resourcesNeeded).map(el => el.value);
-    var resourcesNeededValues = resourcesNeedArray.join(',');
-    
-    var needed = document.getElementById("needed1").value;
-    
-    var resourcesProvided = document.querySelectorAll('input[name=resourcosProvided]:checked');
-    var resourcesProvideArray = Array.from(resourcesProvided).map(el => el.value);
-    var resourcesProvidedValues = resourcesProvideArray.join(',');
-    
-    var provided = document.getElementById("provided1").value;
-    var goals = document.getElementById("goals1").value;
-    var suggestions = document.getElementById("suggestions1").value;
-
-    // Save the questionnaire data to Firestore
-    var db = firebase.firestore();
-    db.collection("users").doc(userEmail1).set({
-        name: userName,
-        username: username,
-        gender: gender,
-        highestDegree: highestDegree,
-        location: location,
-        nationality: nationality,
-        workLocations: workLocations,
-        workOrganizations: workOrganizations,
-        roleOrganization: roleOrganization,
-        typeOfJob: typeOfJobValues,
-        yearsInJob: yearsInJob,
-        resourcesNeeded: resourcesNeededValues,
-        needed: needed,
-        resourcesProvided: resourcesProvidedValues,
-        provided: provided,
-        goals: goals,
-        suggestions: suggestions,
-    }).then(function(){
-        showAlert("Account created successfully!", "success");
-        delay(3000)
-        window.location.reload()
-    })
-}
-
 function logout() {
     firebase.auth().signOut();
+    document.getElementById("mySidenav").style.width = "0"
     showAlert("Signed Out.", "warn")
 }
 
-// Get a reference to the Firestore database
-var db = firebase.firestore();
-
-function matchRequests() {
-    console.log("match")
-
-    const requestsRef = query(collectionGroup(db, 'requests'))
-    const providingRef = query(collectionGroup(db, 'providings'))
-    const matchesRef = query(collectionGroup(db, 'matches'))
-
-    requestsRef.get().then((requestsSnapshot) => {
-        providingRef.get().then((providingSnapshot) => {
-            const requests = requestsSnapshot.docs.map(doc => doc.data());
-            const providings = providingSnapshot.docs.map(doc => doc.data());
-            console.log("reached")
-            for (const request of requests) {
-                const matches = [];
-
-                for (const providing of providings) {
-                    const matchValue = calculateMatchValue(request.requestText, providing.provideText);
-                    if (matchValue > 0.343) {
-                        console.log("MatchValue Maxed")
-                        db.collection('matches')
-                        .doc(request.userEmail + request.requestText + providing.userEmail + providing.provideText)
-                        .set(
-                            {
-                            requesterEmail: request.userEmail,
-                            requestText: request.requestText,
-                            providerEmail: providing.userEmail,
-                            provideText: providing.provideText,
-                            matchValue: matchValue,
-                            },
-                            { merge: true }
-                        )
-                        .then((docRef) => {
-                            console.log('Request submitted successfully dawg!');
-                        })
-                        .catch((error) => {
-                            console.error('Error submitting request: ' + error, "error");
-                        });
-                        console.log("setting")
-                    }
-                }
-            }
-        });
+async function matchUser(user){
+    const userData = formatInput(getUserData(user))
+    const snapshot = await db.collection('users').get();
+    snapshot.forEach(doc => {
+        if(doc.id === user){
+            console.log("Hey, this is me!")
+        } else {
+            console.log(doc.id, '=>', doc.data());
+            compareUsers(user,doc.id)
+        }
     });
 }
 
-function calculateMatchValue(string1, string2) {
-    const match = stringSimilarity.compareTwoStrings(
-        string1,
-        string2
-    );
-    return match;
+async function compareUsers(user1, user2) {
+    // Get the user data from Firestore
+    const user1Data = await getUserData(user1);
+    const user2Data = await getUserData(user2);
+  
+    // Format the data as inputs to the GPT model
+    const input1 = formatInput(user1Data);
+    const input2 = formatInput(user2Data);
+    
+    // Call the OpenAI GPT endpoint to generate text comparing the two users
+    const response = await fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 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' // Replace with your OpenAI API key
+        },
+        body: JSON.stringify({
+            prompt: `Compare user ${user1} to user ${user2}.\n\nUser ${user1}: ${input1}\n\nUser ${user2}: ${input2}\n\n`,
+            temperature:0.5,
+            max_tokens:256,
+            top_p:1,
+            frequency_penalty:0,
+            presence_penalty:0
+        })
+    });
+    // Parse the response and extract the generated text
+    const responseJson = await response.json();
+    const comparison = responseJson.choices[0].text.trim();
+    const docRefPath = `users/${user1}/matches/${user2}/`;
+    const docRefPath2 = `users/${user2}/matches/${user1}`;
+    
+    fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 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'
+        },
+        body: JSON.stringify({
+            prompt: `Similarity Analysis: ${comparison}\n\nDo these two users have enough similarities to be considered a match?\n\nYes or No:\n\n`,
+            temperature:0.2,
+            max_tokens:25,
+            top_p:1,
+            frequency_penalty:0,
+            presence_penalty:0
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        var answer = data.choices[0].text.trim();
+        console.log(comparison)
+        console.log("Answer: " + answer);
+        if(answer.toLowerCase().includes("yes")) {
+            db.doc(docRefPath).set({
+                email:user2,
+                similarities:comparison
+            }).then(() => {
+                console.log(`%c${answer.split(" ")[0]}`, "color:green");
+            }).catch((error) => {
+                console.error(error);
+            });
+            db.doc(docRefPath2).set({
+                email:user2,
+                similarities:comparison
+            }).catch((error) => {
+                console.error(error)
+            })
+        } else {
+            console.log(`%c${answer.split(" ")[0]}`, "color:red");
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+    return comparison;
+}
+
+// Helper function to get a user's data from Firestore
+async function getUserData(user) {
+    const doc = await db.collection('users').doc(user).get();
+    return doc.data();
+}
+
+// Helper function to format user data as input to the GPT model
+function formatInput(data) {
+    let input = '';
+    for (const key in data) {
+        input += `${key}: ${data[key]}\n`;
+    }
+    return input;
 }
 
 function showAlert(text, type) {
@@ -782,4 +784,113 @@ function showAlert(text, type) {
             progressBar.style.width = width + '%'; 
         }
     }
+
+    var startX;
+    alertDiv.addEventListener('touchstart', function (e) {
+        startX = e.changedTouches[0].pageX;
+    });
+
+    alertDiv.addEventListener('touchend', function (e) {
+        var currentX = e.changedTouches[0].pageX;
+        if (currentX < startX) {
+        // User swiped left, dismiss alert
+        alertDiv.style.display = "none";
+        }
+    });
 }
+
+/**
+old prompt: User 1: " + JSON.stringify(input1) + "\n\nUser 2: " + JSON.stringify(input2) + "\n\n
+async function compareUsers(user1, user2) {
+    // Format the data as inputs to the GPT model
+    const input1 = await formatInput(user1);
+    const input2 = await formatInput(user2);
+
+    // Call the OpenAI GPT endpoint to generate text comparing the two users
+    const response1 = await fetch('https://api.openai.com/v1/engines/gpt-3.5-turbo/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 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'
+        },
+        body: JSON.stringify({
+            messages: [
+                {"role": "system", "content": `You are comparing user ${user1} to user ${user2}`},
+                {"role": "user", "content": input1},
+                {"role": "user", "content": input2},
+            ],
+            max_tokens: 256,
+            stop: '\n'
+        })
+    });
+    const responseJson1 = await response1.json();
+    const comparison = responseJson1.choices[0].text.trim();
+
+    // Call the OpenAI GPT endpoint to ask if the two users are a match
+    const response2 = await fetch('https://api.openai.com/v1/engines/gpt-3.5-turbo/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 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'
+        },
+        body: JSON.stringify({
+            messages: [
+                {"role": "system", "content": `Do ${user1} and ${user2} have enough similarities to be considered a match?`},
+                {"role": "user", "content": `User 1: ${input1}\nUser 2: ${input2}`},
+                {"role": "assistant", "content": `Here is my analysis: ${comparison}`},
+                {"role": "user", "content": `Is this a match? Yes or No?`},
+            ],
+            max_tokens: 256,
+            stop: '\n',
+            context: responseJson1.choices[0].context
+        })
+    });
+    const responseJson2 = await response2.json();
+    const match = responseJson2.choices[0].text.trim();
+
+    console.log(`Comparison of ${user1} and ${user2}: ${comparison}`);
+    console.log(`Are ${user1} and ${user2} a match? ${match}`);
+
+    return comparison;
+}
+// Get a reference to the Firestore database
+var db = firebase.firestore();
+
+function matchRequests(user) {
+    console.log("match");
+    var openkey = "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";
+    var db = firebase.firestore();
+
+    db.collection("users").where("email", "==", user).get().then((querySnapshot) => {
+        if (querySnapshot.docs.length > 0) {
+            var fields = querySnapshot.docs[0].data();
+            var currentUserFieldString = "";
+            for (var field in fields) {
+                if (fields.hasOwnProperty(field)) {
+                    currentUserFieldString += fields[field] + " ";
+                }
+            }
+            db.collection("users").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    if (doc.id !== user) {
+                        var fields = doc.data();
+                        var otherUserFieldString = "";
+                        for (var field in fields) {
+                            if (fields.hasOwnProperty(field)) {
+                                otherUserFieldString += fields[field] + " ";
+                            }
+                        }
+                        calculateMatch(currentUserFieldString, otherUserFieldString, openkey);
+                    }
+                });
+            }).catch((error) => {
+                console.log("Error getting documents:", error);
+            });
+        } else {
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+}
+*/
