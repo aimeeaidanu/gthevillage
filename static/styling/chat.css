@@ -1,0 +1,129 @@
+.chatBox{
+	width:50%;
+    margin:auto;
+    border-radius:25px;
+    background-color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 5px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.chatBoxHeader{
+	display: flex;
+    flex-direction: row;
+}
+.beta-tag {
+    background-color: #ff9800;
+    color: white;
+    padding: 2px 5px;
+    font-size: 12px;
+    margin-left: 10px;
+    border-radius: 5px;
+    top: 32px;
+    position: absolute;
+}  
+.closeChatBox{
+	margin-left:auto;
+    color:red;
+    cursor:pointer;
+}
+.sendMessageDiv {
+    display: flex;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.sendMessageDiv input {
+    padding: 15px;
+    flex: 1;
+    border-radius: 15px;
+}
+
+.sendMessageDiv button {
+    padding: 15px;
+    color: white;
+    background-color: #90E76F;
+    border-radius: 15px;
+    width: 80px;
+    margin-left: 10px;
+}
+.messageBox {
+    border: 2px solid #dedede;
+    background-color: #E0FAD6;
+    width:80%;
+    border-radius: 25px;
+    padding: 10px;
+    margin: 10px 0;
+}
+.chatMessages {
+    max-height: 300px; /* adjust to your preference */
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: scroll;
+}
+.chatMessages::-webkit-scrollbar {
+    display: none;
+  }
+  
+.me {
+  margin-left:auto;
+  border-color: #ccc;
+  background-color: #90E76F;
+}
+
+.messageBox::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.myTime {
+  float: right;
+  color: #aaa;
+}
+
+.yourTime {
+  float: left;
+  color: #999;
+}
+
+@media(max-width:800px){
+    .chatBox{
+        width: 80%;
+    }
+}
+@media(max-width:440px){
+    .chatBox{
+        width:95%;
+    }
+}
+@media(max-width:360px){
+    .beta-tag {
+        all:initial;
+        background-color: #ff9800;
+        color: white;
+        padding: 2px 5px;
+        font-size: 12px;
+        margin-left: 10px;
+        border-radius: 5px;
+    }
+}
+@media (max-width: 767px) {
+    .chatMessages {
+      max-height: 300px;
+    }
+  }
+  
+  @media (min-width: 768px) and (max-width: 991px) {
+    .chatMessages {
+      max-height: 400px;
+    }
+  }
+  
+  @media (min-width: 992px) {
+    .chatMessages {
+      max-height: 600px;
+    }
+  }

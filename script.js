@@ -246,12 +246,12 @@ firebase.auth().onAuthStateChanged(async function (user) {
                     userSubtitle.style.fontSize = "small";
                     userSubtitle.textContent = ` Location: ${socialData.location}`;
                     userTitle.appendChild(userSubtitle);
-
                     const buttonsContainer = document.createElement('div');
                     buttonsContainer.className = "user-buttons"
                     buttonsContainer.style.display="flex";
                     buttonsContainer.style.flexDirection="row";
                     const likesRef = firestore.collection(`users/${matchEmail}/likes`);
+                    console.log("matchemail" + matchEmail)
                     const userLikeCount = document.createElement("h4")
                     likesRef.get().then((querySnapshot) => {
                         const numOfLikes = querySnapshot.size;
@@ -271,6 +271,137 @@ firebase.auth().onAuthStateChanged(async function (user) {
                     emojisButton.className = "matchButtonList"
                     emojisButton.dataset.label = "Like";
                     emojisButton.textContent = "👍";
+                    const messageButton = document.createElement("button");
+                    messageButton.id = "message-button" + socialData.name;
+                    messageButton.className = "matchButtonList"
+                    messageButton.dataset.label = "message";
+                    const messageIcon = document.createElement("i");
+                    messageIcon.classList.add("fas", "fa-envelope");
+                    messageIcon.style.color = "darkgray"
+                    messageButton.appendChild(messageIcon);
+                    // Add an onclick event listener to the message button
+                    messageButton.addEventListener("click", function() {
+                        // Create the chat box element
+                        const chatBox = document.createElement("div");
+                        chatBox.className = "chatBox";
+
+                        // Create the chat box header element
+                        const chatBoxHeader = document.createElement("div");
+                        chatBoxHeader.className = "chatBoxHeader";
+
+                        // Create the first h2 element for the chat box header
+                        const chatBoxHeaderH2_1 = document.createElement("h2");
+                        chatBoxHeaderH2_1.textContent = "Chat with " + socialData.name;
+                        // Create the beta stage tag element
+                        const betaTag = document.createElement("span");
+                        betaTag.textContent = "beta";
+                        betaTag.classList.add("beta-tag");
+
+                        // Append the beta stage tag element to the header h2 element
+                        chatBoxHeaderH2_1.appendChild(betaTag);
+                        // Create the second h2 element for the chat box header
+                        const chatBoxHeaderH2_2 = document.createElement("h2");
+                        chatBoxHeaderH2_2.className = "closeChatBox";
+                        chatBoxHeaderH2_2.innerHTML = "&times;";
+                        chatBoxHeaderH2_2.addEventListener('click', function(){
+                            chatBox.style.display="none";
+                        })
+
+                        const chatDisclamar = document.createElement("p")
+                        chatDisclamar.style.color="gray"
+                        chatDisclamar.innerHTML = "Data isn't encrypted in this beta stage so don't share confidential information. We take data privacy seriously and will never share/access your messages with third parties unless required by law or for security reasons. If you catch any bugs, please contact us"
+
+                        // Add the two h2 elements to the chat box header
+                        chatBoxHeader.appendChild(chatBoxHeaderH2_1);
+                        chatBoxHeader.appendChild(chatBoxHeaderH2_2);
+                        
+                        // Get the messages subcollection for the current user and match
+                        const messagesRef = firestore.collection(`users/${userEmail1}/matches/${matchEmail}/messages`);
+                        const chatSection = document.createElement('div')
+                        chatSection.id="chatSection"+matchEmail
+                        chatSection.className="chatMessages"
+                        // Listen for changes to the messages collection
+                        messagesRef.orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+                            chatSection.innerHTML = ""
+                            snapshot.forEach((doc) => {
+                                if (doc.exists) {
+                                    var message = doc.data();console.log("timestamp" + message.timestamp)
+                                    var messageBox = document.createElement("div");
+                                    messageBox.id = `${message.author}&${message.message}&${message.timestamp}`;
+                                    messageBox.classList.add("messageBox");
+                                    if (message.author === userEmail1) {
+                                        messageBox.classList.add("me");
+                                        messageBox.innerHTML = `
+                                        <p>${message.message}</p>
+                                        <span class="yourTime">${new Date(message.timestamp).toLocaleString()}</span>
+                                        `;
+                                    } else {
+                                        messageBox.innerHTML = `
+                                        <p>${message.message}</p>
+                                        <span class="myTime">${new Date(message.timestamp).toLocaleString()}</span>
+                                        `;
+                                    }
+                                    chatSection.appendChild(messageBox);
+                                }
+                            });
+                        });
+                          
+                        // Create the send message div element
+                        const sendMessageDiv = document.createElement("div");
+                        sendMessageDiv.className = "sendMessageDiv";
+
+                        // Create the input element for the send message div
+                        const sendMessageInput = document.createElement("input");
+                        sendMessageInput.type = "text";
+                        sendMessageInput.placeholder = "message";
+
+                        // Create the button element for the send message div
+                        const sendMessageButton = document.createElement("button");
+                        const sendMessageIcon = document.createElement("i");
+                        sendMessageIcon.className = "fa fa-paper-plane";
+                        sendMessageButton.appendChild(sendMessageIcon);
+                        // Reference the messages collection for the current user and the match
+                        const userMessagesRef = db.collection(`users/${userEmail1}/matches/${matchEmail}/messages/`);
+                        const matchMessagesRef = db.collection(`users/${matchEmail}/matches/${userEmail1}/messages/`);
+
+                        // Attach an event listener to the send message button
+                        sendMessageButton.addEventListener("click", function() {
+                            // Get the message text from the send message input
+                            const messageText = sendMessageInput.value.trim();
+
+                            // If the message text is not empty
+                            if (messageText) {
+                                // Get the current timestamp
+                                const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+
+                                // Add the message to the Firestore database for both users
+                                userMessagesRef.add({
+                                    author: userEmail1,
+                                    message: messageText,
+                                    timestamp: timestamp
+                                });
+                                matchMessagesRef.add({
+                                    author: userEmail1,
+                                    message: messageText,
+                                    timestamp: timestamp
+                                });
+                                // Clear the send message input
+                                sendMessageInput.value = "";
+                                console.log('hi')
+                            }
+                        });
+
+                        // Add the input element and send message button to the send message div
+                        sendMessageDiv.appendChild(sendMessageInput);
+                        sendMessageDiv.appendChild(sendMessageButton);
+
+                        // Add the chat box header, message boxes, and send message div to the chat box
+                        chatBox.appendChild(chatBoxHeader);
+                        chatBox.appendChild(chatDisclamar);
+                        chatBox.appendChild(chatSection);
+                        chatBox.appendChild(sendMessageDiv);
+                        document.getElementById("extraFluff").appendChild(chatBox)
+                    });
                     const passButton = document.createElement("button");
                     passButton.className = "matchButtonList"
                     passButton.id = "pass-button" + socialData.name
@@ -281,6 +412,7 @@ firebase.auth().onAuthStateChanged(async function (user) {
                     passButton.appendChild(passIcon);
                     buttonsContainer.appendChild(userLikeCount)
                     buttonsContainer.appendChild(connectButton);
+                    buttonsContainer.appendChild(messageButton)
                     buttonsContainer.appendChild(emojisButton);
                     buttonsContainer.appendChild(passButton);
                     const userDescription = document.createElement("p");
@@ -641,6 +773,18 @@ function login(){
     showAlert("Logged In.", "success")
 }
 
+var forgotPasswordLink = document.getElementById("forgotPasswordLink");
+
+forgotPasswordLink.addEventListener("click", function() {
+    const email = prompt("What is your email address?")
+    
+    firebase.auth().sendPasswordResetEmail(email).then(function() {
+        alert("Password reset email sent.");
+    }).catch(function(error) {
+        alert(error.message);
+    });
+});
+
 // Sign up with Google
 document.getElementById("signupAccountGoogle").addEventListener('click', () => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -744,9 +888,12 @@ function showAlert(text, type) {
     var textDiv = document.getElementById('alertDivText');
     textDiv.innerHTML = text;
     alertDiv.appendChild(textDiv);
+    alertDiv.onclick = function() {
+        alertDiv.style.display = "none";
+    }
 
     var width = 0;
-    var id = setInterval(frame, 30);
+    var id = setInterval(frame, 60);
 
     function frame() {
         if (width >= 100) {
@@ -757,19 +904,6 @@ function showAlert(text, type) {
             progressBar.style.width = width + '%'; 
         }
     }
-
-    var startX;
-    alertDiv.addEventListener('touchstart', function (e) {
-        startX = e.changedTouches[0].pageX;
-    });
-
-    alertDiv.addEventListener('touchend', function (e) {
-        var currentX = e.changedTouches[0].pageX;
-        if (currentX < startX) {
-        // User swiped left, dismiss alert
-        alertDiv.style.display = "none";
-        }
-    });
 }
 
 /**
