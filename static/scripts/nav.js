@@ -9,7 +9,7 @@ var hashFunctions = {
     '#faq': goToFAQ
 };
   
-  // Check if the current hash matches one of the functions and call it
+// Check if the current hash matches one of the functions and call it
 function checkHash() {
     var hash = window.location.hash;
     if (hashFunctions[hash]) {
