@@ -9,29 +9,6 @@ var config = {
 };
 firebase.initializeApp(config);
 var firestore = firebase.firestore();
-// Define the functions to be called for each hash
-var hashFunctions = {
-    '#matches': goToMatches,
-    '#profile': goToProfile,
-    '#questionnaire': goToQuestionnaire,
-    '#contact': goToContact,
-    '#faq': goToFAQ
-}
-  
-  // Check if the current hash matches one of the functions and call it
-function checkHash() {
-    var hash = window.location.hash;
-    if (hashFunctions[hash]) {
-        hashFunctions[hash]();
-    }
-}
-
-// Call checkHash on page load
-window.addEventListener('load', checkHash);
-
-// Call checkHash on hash change
-window.addEventListener('hashchange', checkHash);
-  
 showOverlay();
 console.log("%cHey there, be careful! Don't run any untrustworthy scripts!",'color:red; font-size: 24px; font-weight: bold;' )
 var delay = ms => new Promise(res => setTimeout(res, ms));
@@ -52,7 +29,11 @@ firebase.auth().onAuthStateChanged(async function (user) {
         if (document.getElementById("user-section").style.display = 'block'){
             document.getElementById("slogan").innerHTML = ''
         }
-        
+        if (user.email === "aidanchen@ghealthvillage.com" || user.email === "yap.boum2@gmail.com" || user.email === "jhaberer@mgh.harvard.edu") {
+            document.getElementById("adminLink").style.display = "block";
+        } else {
+            document.getElementById("adminLink").style.display = "none";
+        }
         var db = firebase.firestore()
     
         db.collection("users").doc(user.email).get().then(function(doc) {
@@ -309,7 +290,7 @@ firebase.auth().onAuthStateChanged(async function (user) {
 
                         const chatDisclamar = document.createElement("p")
                         chatDisclamar.style.color="gray"
-                        chatDisclamar.innerHTML = "Data isn't encrypted in this beta stage so don't share confidential information. We take data privacy seriously and will never share/access your messages with third parties unless required by law or for security reasons. If you catch any bugs, please contact us"
+                        chatDisclamar.innerHTML = "Data isn't encrypted in this beta stage so don't share confidential information. We take data privacy seriously and will never share/access your messages with third parties unless required by law or for security reasons."
 
                         // Add the two h2 elements to the chat box header
                         chatBoxHeader.appendChild(chatBoxHeaderH2_1);
@@ -535,6 +516,75 @@ firebase.auth().onAuthStateChanged(async function (user) {
                 });
             });
         });
+        // Get the reference to the contacts collection
+        var contactsRef = firebase.firestore().collection("contact");
+
+        // Listen for changes to the contacts collection
+        contactsRef.onSnapshot((snapshot) => {
+            // Clear the message list
+            console.log("here")
+            const messageList = document.getElementById("contact-message-list");
+            messageList.innerHTML = "";
+
+            // Loop through the contact documents
+            snapshot.forEach((doc) => {
+                // Get the data for the document
+                const data = doc.data();
+
+                // Create a new message element
+                const messageElement = document.createElement("div");
+                messageElement.className = "message";
+
+                // Create elements for the message data
+                const nameElement = document.createElement("div");
+                nameElement.className = "message-name";
+                nameElement.textContent = data.name + " (" + data.email + ")";
+
+                const messageTextElement = document.createElement("div");
+                messageTextElement.className = "message-text";
+                messageTextElement.textContent = data.message;
+
+                const timestampElement = document.createElement("div");
+                timestampElement.className = "message-timestamp";
+                timestampElement.textContent = data.timestamp;
+
+                // Create buttons for the message element
+                const replyButton = document.createElement("button");
+                replyButton.className = "message-button";
+                replyButton.innerHTML = '<i class="fas fa-reply"></i>';
+                replyButton.addEventListener("click", () => {
+                    window.location.href = `mailto:${data.email}`;
+                });
+
+                const dismissButton = document.createElement("button");
+                dismissButton.className = "message-button";
+                dismissButton.innerHTML = '<i class="fas fa-times"></i>';
+                dismissButton.addEventListener("click", () => {
+                    const deleteMessageRef = firebase.firestore().collection("contact").doc(data.email);
+                    
+                    // Delete the message document
+                    deleteMessageRef.delete()
+                      .then(() => {
+                        showAlert("Message deleted successfully", "success");
+                      })
+                      .catch((error) => {
+                        showAlert("Error deleting message:", error, "error");
+                      });
+                  });
+                  
+
+                // Append the message data elements to the message element
+                messageElement.appendChild(document.createElement('hr'))
+                messageElement.appendChild(nameElement);
+                messageElement.appendChild(messageTextElement);
+                messageElement.appendChild(timestampElement);
+                messageElement.appendChild(replyButton);
+                messageElement.appendChild(dismissButton);
+
+                // Append the message element to the message list
+                messageList.appendChild(messageElement);
+            });
+        });
         if(document.getElementById("limbo-state").style.display == "block"){
             document.getElementById("user-section").style.display = "none";
         }
@@ -549,15 +599,19 @@ firebase.auth().onAuthStateChanged(async function (user) {
     }
 });
 
-// Show the overlay and spinner
 function showOverlay() {
-    document.getElementById("overlay").style.display = "block";
+    var overlay = document.getElementById("overlay");
+    if (overlay) {
+      overlay.style.display = "block";
+    }
 }
-
-// Hide the overlay and spinner
+  
 function hideOverlay() {
-    document.getElementById("overlay").style.display = "none";
-}
+    var overlay = document.getElementById("overlay");
+    if (overlay) {
+      overlay.style.display = "none";
+    }
+}  
 
 function editQuestionnaireField(field){
     console.log(field)
@@ -572,77 +626,6 @@ document.getElementById("signInLink").addEventListener('click', function(){
     document.getElementById("welcome-section").style.display = "block"
     document.getElementById("create-section").style.display = "none"
 })
-
-function openNav() {
-    if(document.getElementById("mySidenav").style.width != "250px"){
-        document.getElementById("mySidenav").style.width = "250px";
-    }else{
-        closeNav()
-    }
-}
-  
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-}
-
-function goToMatches(){
-    document.getElementById("user-profile").style.display="none";
-    document.getElementById("user-list").style.display="block";
-    document.getElementById("user-passed").style.display="flex"
-    document.getElementById("user-contact").style.display="none";
-    document.getElementById("user-questions").style.display="none";
-    document.getElementById("user-questionnaire").style.display="none";
-    document.getElementById("mySidenav").style.width = "0";
-}
-function goToProfile(){
-    document.getElementById("user-profile").style.display="block";
-    document.getElementById("user-list").style.display="none";
-    document.getElementById("user-contact").style.display="none";
-    document.getElementById("user-passed").style.display="none"
-    document.getElementById("user-questions").style.display="none";
-    document.getElementById("user-questionnaire").style.display="none";
-    document.getElementById("mySidenav").style.width = "0";
-}
-
-function goToQuestionnaire(){
-    document.getElementById("user-profile").style.display="none";
-    document.getElementById("user-list").style.display="none";
-    document.getElementById("user-passed").style.display="none"
-    document.getElementById("user-contact").style.display="none";
-    document.getElementById("user-questions").style.display="none";
-    document.getElementById("user-questionnaire").style.display="block";
-    document.getElementById("mySidenav").style.width = "0";
-}
-function goToContact(){
-    document.getElementById("user-profile").style.display="none";
-    document.getElementById("user-list").style.display="none";
-    document.getElementById("user-passed").style.display="none"
-    document.getElementById("user-contact").style.display="block";
-    document.getElementById("user-questions").style.display="none";
-    document.getElementById("user-questionnaire").style.display="none";
-    document.getElementById("mySidenav").style.width = "0";
-}
-
-function goToFAQ(){
-    document.getElementById("user-profile").style.display="none";
-    document.getElementById("user-list").style.display="none";
-    document.getElementById("user-passed").style.display="none"
-    document.getElementById("user-contact").style.display="none";
-    if(document.getElementById("user-questions").style.display=="block"){
-        document.getElementById("user-questions").style.display="none";
-        if(document.getElementById("welcome-section").style.display=="none" || document.getElementById("create-section").style.display=="none"){
-            document.getElementById("welcome-section").style.display="block"
-        }
-    }else{
-        document.getElementById("user-questions").style.display="block";
-        if(document.getElementById("welcome-section").style.display=="block" || document.getElementById("create-section").style.display=="block"){
-            document.getElementById("welcome-section").style.display="none"
-            document.getElementById("create-section").style.display="none"
-        }
-    }
-    document.getElementById("user-questionnaire").style.display="none";
-    document.getElementById("mySidenav").style.width = "0";
-}
 
 var db = firebase.firestore();
 // Get a reference to the "contact" collection
@@ -835,19 +818,6 @@ function logout() {
     showAlert("Signed Out.", "warn")
 }
 
-async function matchUser(user){
-    const userData = formatInput(getUserData(user))
-    const snapshot = await db.collection('users').get();
-    snapshot.forEach(doc => {
-        if(doc.id === user){
-            console.log("Hey, this is me!")
-        } else {
-            console.log(doc.id, '=>', doc.data());
-            compareUsers(user,doc.id)
-        }
-    });
-}
-
 var coll = document.getElementsByClassName("passedUserCollapsible");
 var i;
 
@@ -905,191 +875,3 @@ function showAlert(text, type) {
         }
     }
 }
-
-/**
- * async function compareUsers(user1, user2) {
-    // Get the user data from Firestore
-    const user1Data = await getUserData(user1);
-    const user2Data = await getUserData(user2);
-  
-    // Format the data as inputs to the GPT model
-    const input1 = formatInput(user1Data);
-    const input2 = formatInput(user2Data);
-    
-    // Call the OpenAI GPT endpoint to generate text comparing the two users
-    const response = await fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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' // Replace with your OpenAI API key
-        },
-        body: JSON.stringify({
-            prompt: `Compare user ${user1} to user ${user2}.\n\nUser ${user1}: ${input1}\n\nUser ${user2}: ${input2}\n\n`,
-            temperature:0.5,
-            max_tokens:256,
-            top_p:1,
-            frequency_penalty:0,
-            presence_penalty:0
-        })
-    });
-    // Parse the response and extract the generated text
-    const responseJson = await response.json();
-    const comparison = responseJson.choices[0].text.trim();
-    const docRefPath = `users/${user1}/matches/${user2}/`;
-    const docRefPath2 = `users/${user2}/matches/${user1}`;
-    
-    fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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'
-        },
-        body: JSON.stringify({
-            prompt: `Similarity Analysis: ${comparison}\n\nDo these two users have enough similarities to be considered a match?\n\nYes or No:\n\n`,
-            temperature:0.2,
-            max_tokens:25,
-            top_p:1,
-            frequency_penalty:0,
-            presence_penalty:0
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        var answer = data.choices[0].text.trim();
-        console.log(comparison)
-        console.log("Answer: " + answer);
-        if(answer.toLowerCase().includes("yes")) {
-            db.doc(docRefPath).set({
-                email:user2,
-                similarities:comparison
-            }).then(() => {
-                console.log(`%c${answer.split(" ")[0]}`, "color:green");
-            }).catch((error) => {
-                console.error(error);
-            });
-            db.doc(docRefPath2).set({
-                email:user2,
-                similarities:comparison
-            }).catch((error) => {
-                console.error(error)
-            })
-        } else {
-            console.log(`%c${answer.split(" ")[0]}`, "color:red");
-        }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-    return comparison;
-}
-
-// Helper function to get a user's data from Firestore
-async function getUserData(user) {
-    const doc = await db.collection('users').doc(user).get();
-    return doc.data();
-}
-
-// Helper function to format user data as input to the GPT model
-function formatInput(data) {
-    let input = '';
-    for (const key in data) {
-        input += `${key}: ${data[key]}\n`;
-    }
-    return input;
-}
-
-
-old prompt: User 1: " + JSON.stringify(input1) + "\n\nUser 2: " + JSON.stringify(input2) + "\n\n
-async function compareUsers(user1, user2) {
-    // Format the data as inputs to the GPT model
-    const input1 = await formatInput(user1);
-    const input2 = await formatInput(user2);
-
-    // Call the OpenAI GPT endpoint to generate text comparing the two users
-    const response1 = await fetch('https://api.openai.com/v1/engines/gpt-3.5-turbo/chat', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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'
-        },
-        body: JSON.stringify({
-            messages: [
-                {"role": "system", "content": `You are comparing user ${user1} to user ${user2}`},
-                {"role": "user", "content": input1},
-                {"role": "user", "content": input2},
-            ],
-            max_tokens: 256,
-            stop: '\n'
-        })
-    });
-    const responseJson1 = await response1.json();
-    const comparison = responseJson1.choices[0].text.trim();
-
-    // Call the OpenAI GPT endpoint to ask if the two users are a match
-    const response2 = await fetch('https://api.openai.com/v1/engines/gpt-3.5-turbo/chat', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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'
-        },
-        body: JSON.stringify({
-            messages: [
-                {"role": "system", "content": `Do ${user1} and ${user2} have enough similarities to be considered a match?`},
-                {"role": "user", "content": `User 1: ${input1}\nUser 2: ${input2}`},
-                {"role": "assistant", "content": `Here is my analysis: ${comparison}`},
-                {"role": "user", "content": `Is this a match? Yes or No?`},
-            ],
-            max_tokens: 256,
-            stop: '\n',
-            context: responseJson1.choices[0].context
-        })
-    });
-    const responseJson2 = await response2.json();
-    const match = responseJson2.choices[0].text.trim();
-
-    console.log(`Comparison of ${user1} and ${user2}: ${comparison}`);
-    console.log(`Are ${user1} and ${user2} a match? ${match}`);
-
-    return comparison;
-}
-// Get a reference to the Firestore database
-var db = firebase.firestore();
-
-function matchRequests(user) {
-    console.log("match");
-    var openkey = "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";
-    var db = firebase.firestore();
-
-    db.collection("users").where("email", "==", user).get().then((querySnapshot) => {
-        if (querySnapshot.docs.length > 0) {
-            var fields = querySnapshot.docs[0].data();
-            var currentUserFieldString = "";
-            for (var field in fields) {
-                if (fields.hasOwnProperty(field)) {
-                    currentUserFieldString += fields[field] + " ";
-                }
-            }
-            db.collection("users").get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    if (doc.id !== user) {
-                        var fields = doc.data();
-                        var otherUserFieldString = "";
-                        for (var field in fields) {
-                            if (fields.hasOwnProperty(field)) {
-                                otherUserFieldString += fields[field] + " ";
-                            }
-                        }
-                        calculateMatch(currentUserFieldString, otherUserFieldString, openkey);
-                    }
-                });
-            }).catch((error) => {
-                console.log("Error getting documents:", error);
-            });
-        } else {
-            console.log("No such document!");
-        }
-    }).catch((error) => {
-        console.log("Error getting document:", error);
-    });
-}
-*/

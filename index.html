@@ -11,10 +11,13 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
     <link rel="stylesheet" href="https://kit.fontawesome.com/00b4129126.css" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="script.js"></script>
     <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
     <script src="https://unpkg.com/compromise"></script>
     <script src="https://cdn.jsdelivr.net/npm/string-similarity/umd/string-similarity.min.js"></script>
+    <script language="javascript" src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-firestore.js"></script>
+    <script>
+    </script>
   </head>
   <body>
     <div id="overlay">
@@ -35,6 +38,7 @@
             <a href="#" onclick="goToProfile()"><i class="fas fa-user"></i> My Profile</a>
             <a href="#" onclick="goToContact()"><i class="fa fa-envelope"></i> Contact Us</a>
             <a href="#" onclick="goToFAQ()"><i class="fas fa-question-circle"></i> FAQs</a>
+            <a href="#" id="adminLink" style="display:none;" onclick="goToAdmin()"><i class="fas fa-cog"></i> Admin Panel</a>
             <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </div>
@@ -512,6 +516,12 @@
             </div>
         </div>
         <div id="extraFluff"></div>
+        <div id="user-admin-panel" class="limbo-state" style="display:none"><br>
+            <h3 style="text-align:center;">Contact Us Messages</h3>
+            <div id="contact-message-list">
+                <center id="noMessages"><span style="color:red">No messages yet.</span></center>
+            </div>
+        </div>
         <div id="user-questionnaire" class="limbo-state" style="display:none"><br>
             <h3 style="text-align:center;">Questionnaire</h3>
                 <div class="row" id="page1">
@@ -918,12 +928,8 @@
             </div>
         </div>
     </footer>
-      
-    <script language="javascript" src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-firestore.js"></script>
-    <script>
-    </script>
     <script src="script.js"></script>
     <script src="static/scripts/form.js"></script>
+    <script src="static/scripts/nav.js"></script>
 </body>
 </html>

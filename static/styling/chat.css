@@ -12,7 +12,7 @@
 }
 .chatBoxHeader{
 	display: flex;
-    flex-direction: row;
+  flex-direction: row;
 }
 .beta-tag {
     background-color: #ff9800;
@@ -87,6 +87,13 @@
 .yourTime {
   float: left;
   color: #999;
+}
+
+.message-button{
+  width:initial !important;
+  background-color: transparent !important;
+  color:black !important;
+  cursor: pointer;
 }
 
 @media(max-width:800px){
